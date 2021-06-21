@@ -1,0 +1,39 @@
+body{
+    font-family: 'Roboto', sans-serif;
+}
+#jumbotron {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+	background-image: url("assets/landing-page.jpg");
+	background-size: cover;
+	background-position: center;
+}
+#content {
+	padding-top: 20%;
+}
+#jumbotron h3 {
+	font-family: 'Nunito', 'sans-serif';
+    font-weight: 900;
+    color: black;
+	font-size: 3em;
+}
+.login{
+    margin-top: 100px;
+}
+.register{
+    margin-top: 80px;
+}
+.gap-2{
+    margin-top: 20px
+}
+hr {
+    background-color: #b1acac;
+    width: 100%;
+    display: block;
+	margin-top: 2px;
+	border-top: 1px solid #8c8b8b;
+	border-bottom: 1px solid #fff;
+    height: 6px;
+    border: 0;
+    margin: 8% 0;
+}
