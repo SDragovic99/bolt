@@ -11,9 +11,9 @@ public class CSVWriter {
 		this.fileName = fileName;
 	}
 	
-	public void write(List<String> data) {
+	public void write(String data) {
 		try(FileWriter csvWriter = new FileWriter(fileName, true)) {
-			csvWriter.write(String.join(",", data) + "\n");
+			csvWriter.write(data + "\n");
 			
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -29,7 +29,7 @@ public class UserDAO {
 	
 	public void addUser(User user) {
 		users.put(user.getUsername(), user);
-		csvWriter.write(user.stringify());
+		csvWriter.write(user.toString());
 	}
 	
 	public HashMap<String, User> loadUsers() {

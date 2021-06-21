@@ -69,15 +69,8 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	public List<String> stringify(){
-		List<String> stringified = new ArrayList<>();
-		stringified.add(this.username);
-		stringified.add(this.password);
-		stringified.add(this.name);
-		stringified.add(this.surname);
-		stringified.add(this.gender);
-		stringified.add(this.dateOfBirth);
-		stringified.add("customer"); //TODO change to enum
-		return stringified;
-	}
+	 @Override
+    public String toString() {
+        return username + "," + password + "," + name + "," + surname + "," + gender + "," + dateOfBirth + "," + role;
+    }
 }
