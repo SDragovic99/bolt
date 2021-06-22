@@ -1,6 +1,14 @@
 Vue.component('app-navbar', {
     data: function(){
-		return {};
+		return {
+            loggedIn: window.localStorage.getItem('token'), 
+            role: ''
+        };
+    },
+    mounted: function(){
+        if(this.loggedIn){
+            this.role = parseJwt(window.localStorage.getItem('token')).Role;
+        }
     },
     template: `
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -10,7 +18,7 @@ Vue.component('app-navbar', {
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto flex-nowrap">
+                <ul class="navbar-nav ms-auto flex-nowrap" v-if="!loggedIn">
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="#" v-on:click="login">Prijava</a>
                     </li>
@@ -18,6 +26,21 @@ Vue.component('app-navbar', {
                         <a class="nav-link" href="#" v-on:click="register">Registracija</a>
                     </li>
                 </ul>
+                <ul class="navbar-nav ms-auto flex-nowrap" v-if="role == 'admin' && loggedIn">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Svi profili</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Dodaj novi restoran</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Moj profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a>
+                    </li>
+                </ul>
+                
             </div>
             </div>
         </nav>
@@ -30,6 +53,12 @@ Vue.component('app-navbar', {
         register: function(event){
             event.preventDefault();
             this.$router.push('/register')
+        },
+        logout: function(event){
+            event.preventDefault();
+            window.localStorage.removeItem("token");
+            this.loggedIn = false;
+            this.$router.push('/')
         }
     }
 });

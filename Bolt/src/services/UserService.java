@@ -18,4 +18,9 @@ public class UserService {
 		}
 		return null;
 	}
+	
+	public User findUser(String username) {
+		User user = userDAO.findUser(username);
+		return user;
+	}
 }
