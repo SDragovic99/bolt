@@ -1,7 +1,7 @@
 Vue.component('app-registration', {
     data: function(){
 		return {
-            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null},
+            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: "customer"},
             isSubmitted: false,
             uniqueUsername: true
         };

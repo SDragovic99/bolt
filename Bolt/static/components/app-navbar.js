@@ -12,10 +12,10 @@ Vue.component('app-navbar', {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto flex-nowrap">
                     <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#" v-on:click="login">Prijava</a>
+                        <a class="nav-link" aria-current="page" href="#" v-on:click="login">Prijava</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#" v-on:click="register">Registracija</a>
+                        <a class="nav-link" href="#" v-on:click="register">Registracija</a>
                     </li>
                 </ul>
             </div>

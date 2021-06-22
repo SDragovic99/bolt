@@ -1,6 +1,5 @@
 package services;
 
-import beans.Role;
 import beans.User;
 import dao.UserDAO;
 
@@ -14,7 +13,6 @@ public class UserService {
 	public User registerUser(User user) {
 		User existingUser = userDAO.findUser(user.getUsername());
 		if (existingUser == null) {
-			user.setRole(Role.customer);
 			userDAO.addUser(user);
 			return user;
 		}
