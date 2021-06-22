@@ -36,7 +36,7 @@ public class UserDAO {
 		HashMap<String, User> users = new HashMap<>();
 		List<String[]> data = csvReader.read();
 		for (String[] strings : data) {
-			User user = new User(strings[0], strings[1], strings[2], strings[3], strings[4], Role.customer);
+			User user = new User(strings[0], strings[1], strings[2], strings[3], strings[4], strings[5], Role.valueOf(strings[6]));
 			users.put(strings[0], user);
 		}
 		

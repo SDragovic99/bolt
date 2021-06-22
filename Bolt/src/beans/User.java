@@ -1,8 +1,5 @@
 package beans;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class User {
 	private String username;
 	private String password;
@@ -16,12 +13,13 @@ public class User {
 		super();
 	}
 	
-	public User(String username, String password, String name, String surname, String dateOfBirth, Role role) {
+	public User(String username, String password, String name, String surname, String gender, String dateOfBirth, Role role) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.name = name;
 		this.surname = surname;
+		this.gender = gender;
 		this.dateOfBirth = dateOfBirth;
 		this.role = role;
 	}
