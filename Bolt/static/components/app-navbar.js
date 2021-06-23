@@ -34,6 +34,9 @@ Vue.component('app-navbar', {
                         <a class="nav-link" aria-current="page" href="#">Dodaj novi restoran</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#" v-on:click="register_worker">Registracija radnika</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="#">Moj profil</a>
                     </li>
                     <li class="nav-item">
@@ -59,6 +62,10 @@ Vue.component('app-navbar', {
             window.localStorage.removeItem("token");
             this.loggedIn = false;
             this.$router.push('/')
+        },
+        register_worker: function(event){
+            event.preventDefault();
+            this.$router.push('/register-worker');
         }
     }
 });
