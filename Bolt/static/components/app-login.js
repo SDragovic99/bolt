@@ -47,7 +47,6 @@ Vue.component('app-login', {
                 }).catch(error =>  {
                     this.invalid = true;
                     window.localStorage.removeItem("token");
-                    Role = 'guest';
                 });               
             }
             
