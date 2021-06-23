@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 
 import beans.User;
 import dto.CredentialsDTO;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import services.UserService;
 
@@ -27,7 +29,29 @@ public class UserController {
 				return "Bad request";
 			}
 			return "SUCCESS";
-		});	
+		});
+		
+		post("/workers", (req, res) -> {
+			res.type("application/json");
+			
+			String auth = req.headers("Authorization");
+			if ((auth != null) && (auth.contains("Bearer "))) {
+				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
+				try {
+				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+					User user = gson.fromJson(req.body(), User.class);
+					if(userService.registerUser(user) == null) {
+						res.status(400);
+						return "Bad request";
+					}
+					return "SUCCESS";
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			res.status(403);
+			return "Forbidden";
+		});
 		
 		post("/auth", (req, res) -> {
 			res.type("application/json");

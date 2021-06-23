@@ -65,16 +65,29 @@ Vue.component('app-registration-workers', {
             </div>
         </div>
     </div>
+    </div>
                    
     `,
     methods: {
         register: function(){
             this.isSubmitted = true;
             if(this.user.name && this.user.surname && this.user.dateOfBirth && this.user.gender && this.user.role && this.user.username && this.user.password){
+                let token = window.localStorage.getItem('token');
                 axios
-                .post("/users", this.user)
+                .post("/workers", this.user, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
                 .then(response => (router.push('/')))
-                .catch(error =>  this.uniqueUsername = false);
+                .catch(error => { 
+                    if(error.response.status == 403){
+                        // TODO: Redirect to 403 page 
+                        router.push('/');
+                    } else {
+                        this.uniqueUsername = false;
+                    }
+                })
             }  
         }
     }
