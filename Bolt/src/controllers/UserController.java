@@ -1,5 +1,6 @@
 package controllers;
 
+import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.get;
 import static spark.Spark.put;
@@ -11,8 +12,6 @@ import com.google.gson.Gson;
 
 import beans.User;
 import dto.CredentialsDTO;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import services.UserService;
 
@@ -22,6 +21,22 @@ public class UserController {
 	
 	public UserController(Key key) {
 		this.userService = new UserService();
+		
+		get("/users", (req, res) -> {
+			res.type("application/json");
+			String auth = req.headers("Authorization");
+			if ((auth != null) && (auth.contains("Bearer "))) {
+				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
+				try {
+				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+					return gson.toJson(userService.getAll());
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			res.status(403);
+			return "Forbidden";
+		});
 		
 		post("/users", (req, res) -> {
 			res.type("application/json");

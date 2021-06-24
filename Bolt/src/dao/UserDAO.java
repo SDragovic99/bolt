@@ -32,6 +32,7 @@ public class UserDAO {
 		csvWriter.write(user.toString());
 	}
 	
+
 	public void updateUser(User user) {
 		users.remove(user.getUsername());
 		csvWriter.rewrite(user.toString());
@@ -41,7 +42,8 @@ public class UserDAO {
 		users.put(user.getUsername(), user);
 	}
 	
-	public HashMap<String, User> loadUsers() {
+
+	private HashMap<String, User> loadUsers() {
 		HashMap<String, User> users = new HashMap<>();
 		List<String[]> data = csvReader.read();
 		for (String[] strings : data) {
@@ -51,4 +53,5 @@ public class UserDAO {
 		
 		return users;
 	}
+	
 }

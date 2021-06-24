@@ -5,7 +5,7 @@ Vue.component('app-home', {
     template: `
         <div id="jumbotron">
             <app-navbar></app-navbar>
-            <div class="container-fluid mx-lg-5">
+            <div class="container">
                 <div class="row"> 
                     <div class="col-lg-12">
                         <div id="content">

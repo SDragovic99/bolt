@@ -14,7 +14,7 @@ Vue.component('app-navbar', {
     },
     template: `
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid mx-lg-5">
+            <div class="container">
                 <a class="navbar-brand" href="#" v-on:click="home"><img src="assets/bolt.svg"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -37,6 +37,7 @@ Vue.component('app-navbar', {
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
+                                <li><a class="nav-link" aria-current="page" href="#" v-on:click="allProfiles">Korisnici</a></li>
                                 <li><a class="nav-link" href="#" v-on:click="register_worker">Registracija radnika</a></li>
                                 <li><a class="nav-link" aria-current="page" href="#">Dodaj novi restoran</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -117,6 +118,10 @@ Vue.component('app-navbar', {
         my_profile: function(event){
             event.preventDefault();
             this.$router.push('/my-profile');
+        }, 
+        allProfiles: function(event){
+            event.preventDefault();
+            this.$router.push('/all-users');
         }
     }
 });

@@ -33,25 +33,7 @@ Vue.component('app-my-profile', {
     },
     template: `
     <div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid mx-lg-5">
-          <a class="navbar-brand" href="#">Bolt</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto flex-nowrap">
-                <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="#">Profil</a>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-outline-dark"><i class="fa fa-shopping-bag"></i></button>
-                </li>
-            </ul>
-          </div>
-        </div>
-    </nav>
-
+    <app-navbar></app-navbar>
     <div id="header" class="container-fluid py-5">
         <div class="container p-3 mt-5 col-md-11 justify-content-bottom">
             <h1 class="fw-bold">Moj nalog</h1>

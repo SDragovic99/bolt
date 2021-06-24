@@ -1,5 +1,15 @@
-body{
+body { 
+    overflow-x: hidden; 
     font-family: 'Roboto', sans-serif;
+}
+.outline-card{
+    border-radius: .25rem;
+    border: 1px solid #eee;
+    border-left-color: #5bc0de;
+    border-left-width: .25rem;
+}
+.btn-group{
+    margin-top: .9rem;
 }
 #jumbotron {
     position: fixed;
@@ -52,4 +62,10 @@ a img{
 }
 #password-header{
     margin-bottom: 25px;
+}
+#filter-section h5{
+    font-family: 'Nunito', 'sans-serif';
+}
+.search-bar button{
+    border-color: #ced4da;
 }
