@@ -36,7 +36,7 @@ Vue.component('app-navbar', {
                                 {{username}}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="nav-link" aria-current="page" href="#">Moj profil</a></li>
+                                <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
                                 <li><a class="nav-link" href="#" v-on:click="register_worker">Registracija radnika</a></li>
                                 <li><a class="nav-link" aria-current="page" href="#">Dodaj novi restoran</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -51,7 +51,7 @@ Vue.component('app-navbar', {
                                 {{username}}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="nav-link" aria-current="page" href="#">Moj profil</a></li>
+                                <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
                                 <li><a class="nav-link" href="#">Moj restoran</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
@@ -65,7 +65,7 @@ Vue.component('app-navbar', {
                                 {{username}}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="nav-link" aria-current="page" href="#">Moj profil</a></li>
+                                <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
                                 <li><a class="nav-link" aria-current="page" href="#">Moje porudžbine</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
@@ -79,7 +79,7 @@ Vue.component('app-navbar', {
                                 {{username}}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="nav-link" aria-current="page" href="#">Moj profil</a></li>
+                                <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
                                 <li><a class="nav-link" aria-current="page" href="#">Porudžbine</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
@@ -113,6 +113,10 @@ Vue.component('app-navbar', {
         home: function(event){
             event.preventDefault();
             this.$router.push('/');
+        },
+        my_profile: function(event){
+            event.preventDefault();
+            this.$router.push('/my-profile');
         }
     }
 });

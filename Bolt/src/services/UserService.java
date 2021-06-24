@@ -31,4 +31,13 @@ public class UserService {
 		User user = userDAO.findUser(username);
 		return user;
 	}
+	
+	public User updateUser(User user) {
+		User existingUser = userDAO.findUser(user.getUsername());
+		if (existingUser != null) {
+			userDAO.updateUser(user);
+			return user;
+		}
+		return null;
+	}
 }

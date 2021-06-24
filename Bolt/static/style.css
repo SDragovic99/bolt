@@ -41,3 +41,15 @@ a img{
     width: 25%;
     height: 100%;
 }
+#header{
+    background-image: url("assets/my-profile.jpg");
+    background-size: cover;
+	background-position: center;
+    color: white;
+}
+#my-profile h5{
+    font-family: 'Nunito', sans-serif;
+}
+#password-header{
+    margin-bottom: 25px;
+}

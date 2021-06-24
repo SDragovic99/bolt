@@ -1,6 +1,8 @@
 package controllers;
 
 import static spark.Spark.post;
+import static spark.Spark.get;
+import static spark.Spark.put;
 
 import java.security.Key;
 import java.util.Date;
@@ -31,6 +33,51 @@ public class UserController {
 			return "SUCCESS";
 		});
 		
+		get("/users/:username", (req, res) -> {
+			res.type("application/json");
+			
+			String auth = req.headers("Authorization");
+			if ((auth != null) && (auth.contains("Bearer "))) {
+				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
+				try {
+				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+				    String username = req.params("username");
+				    User user = userService.findUser(username);
+					if(user == null) {
+						res.status(400);
+						return "User not found: " + username;
+					}
+					return gson.toJson(user);
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			res.status(400);
+			return "Bad request";
+		});
+		
+		put("/users/:username", (req, res) -> {
+			res.type("application/json");
+			
+			String auth = req.headers("Authorization");
+			if ((auth != null) && (auth.contains("Bearer "))) {
+				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
+				try {
+				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+					User user = gson.fromJson(req.body(), User.class);
+					if(userService.updateUser(user) == null) {
+						res.status(400);
+						return "Bad request";
+					}
+					return "SUCCESS";
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			res.status(400);
+			return "Bad request";
+		});
+		
 		post("/workers", (req, res) -> {
 			res.type("application/json");
 			
@@ -49,8 +96,8 @@ public class UserController {
 					System.out.println(e.getMessage());
 				}
 			}
-			res.status(403);
-			return "Forbidden";
+			res.status(400);
+			return "Bad request";
 		});
 		
 		post("/auth", (req, res) -> {

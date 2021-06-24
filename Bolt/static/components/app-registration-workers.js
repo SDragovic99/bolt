@@ -44,6 +44,7 @@ Vue.component('app-registration-workers', {
                             <option value="manager">Menadžer restorana</option>
                             <option value="deliverer">Dostavljač</option>
                         </select>
+                        <div class="invalid-feedback">Odaberite ulogu</div>
                     </div>
                     <div class="col-md-6">
                         <label for="username" class="form-label">Korisničko ime</label>
@@ -81,8 +82,8 @@ Vue.component('app-registration-workers', {
                 })
                 .then(response => (router.push('/')))
                 .catch(error => { 
-                    if(error.response.status == 403){
-                        // TODO: Redirect to 403 page 
+                    if(error.response.status == 400){
+                        // TODO: Redirect to 400 page 
                         router.push('/');
                     } else {
                         this.uniqueUsername = false;

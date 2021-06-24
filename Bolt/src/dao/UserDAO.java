@@ -32,6 +32,15 @@ public class UserDAO {
 		csvWriter.write(user.toString());
 	}
 	
+	public void updateUser(User user) {
+		users.remove(user.getUsername());
+		csvWriter.rewrite(user.toString());
+		for(User current_user : users.values()) {
+			csvWriter.write(current_user.toString());
+		}
+		users.put(user.getUsername(), user);
+	}
+	
 	public HashMap<String, User> loadUsers() {
 		HashMap<String, User> users = new HashMap<>();
 		List<String[]> data = csvReader.read();
