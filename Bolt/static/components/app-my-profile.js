@@ -2,9 +2,15 @@ Vue.component('app-my-profile', {
     data: function(){
 		return {
             user: {},
-            isSubmitted: false,
+            isSubmittedUpdate: false,
+            isSubmittedPassword: false,
+            wrongPassword: false,
             full_name: '',
             username: '',
+            oldPassword: '',
+            newPassword: '',
+            validUpdate: false,
+            validPassword: false
         };
     },
     mounted: function() {
@@ -64,17 +70,17 @@ Vue.component('app-my-profile', {
                 <form class="row g-3">
                     <div class="col-md-5">
                         <label for="name" class="form-label">Ime</label>
-                        <input type="text" class="form-control" id="name" placeholder="Ime" v-model="user.name" v-bind:class="{'is-invalid' : !user.name && isSubmitted}">
+                        <input type="text" class="form-control" id="name" placeholder="Ime" v-model="user.name" v-bind:class="{'is-invalid' : !user.name && isSubmittedUpdate}">
                         <div class="invalid-feedback">Popunite polje</div>    
                     </div>
                     <div class="col-md-5">
                         <label for="surname" class="form-label">Prezime</label>
-                        <input type="text" class="form-control" id="surname" placeholder="Prezime" v-model="user.surname" v-bind:class="{'is-invalid' : !user.surname && isSubmitted}">
+                        <input type="text" class="form-control" id="surname" placeholder="Prezime" v-model="user.surname" v-bind:class="{'is-invalid' : !user.surname && isSubmittedUpdate}">
                         <div class="invalid-feedback">Popunite polje</div>
                     </div>
                     <div class="col-md-5">
                         <label for="dateOfBirth" class="form-label">Datum rođenja</label>
-                        <input type="date" class="form-control" id="dateOfBirth" v-model="user.dateOfBirth" v-bind:class="{'is-invalid' : !user.dateOfBirth && isSubmitted}">
+                        <input type="date" class="form-control" id="dateOfBirth" v-model="user.dateOfBirth" v-bind:class="{'is-invalid' : !user.dateOfBirth && isSubmittedUpdate}">
                     </div>
                     <div class="col-md-5">
                         <label for="gender" class="form-label">Pol</label>
@@ -85,7 +91,8 @@ Vue.component('app-my-profile', {
                     </div>
                     <div class="w-100"></div>
                     <div class="d-grid gap-2 col-md-5">
-                        <button class="btn btn-primary" id="liveToastBtn" type="button" v-on:click='update'>Snimi izmene</button>
+                        <button class="btn btn-primary" type="button" v-on:click='update'>Snimi izmene</button>
+                        <p class="text-success" :style="{visibility: validUpdate ? 'visible' : 'hidden'}">Izmene uspešno snimljene!</p>
                     </div>
                 </form>
             </div>
@@ -95,16 +102,20 @@ Vue.component('app-my-profile', {
                 <div class="row g-3">
                     <div class="col-md-5">
                         <label for="password" class="form-label">Trenutna šifra</label>
-                        <input type="password" class="form-control" id="current_password">
+                        <input type="password" class="form-control" id="current_password" v-model="oldPassword" v-bind:class="{'is-invalid' : !oldPassword && isSubmittedPassword || wrongPassword}">
+                        <div class="invalid-feedback">Neispravna lozinka.</div>
                     </div> 
                     <div class="col-md-5">
                         <label for="password" class="form-label">Nova šifra</label>
-                        <input type="password" class="form-control" id="new_password">
+                        <input type="password" class="form-control" id="new_password" v-model="newPassword" v-bind:class="{'is-invalid' : !newPassword && isSubmittedPassword}">
+                        <div class="invalid-feedback">Popunite polje</div>
                     </div>  
                     <div class="w-100"></div>             
-                    <div class="d-grid col-md-5">
-                        <button class="btn btn-primary" type="button">Promeni lozinku</button>
-                    </div>   
+                    <div class="d-grid gap-2 col-md-5">
+                        <button class="btn btn-primary" type="button" v-on:click='updatePassword'>Promeni lozinku</button>
+                        <p class="text-success" :style="{visibility: validPassword ? 'visible' : 'hidden'}">Lozinka uspešno promenjena!</p>
+                    </div>
+            </div>
                 </div>                      
             </div>
         </div>
@@ -113,7 +124,7 @@ Vue.component('app-my-profile', {
     `,
     methods: {
         update: function() {
-            this.isSubmitted = true;
+            this.isSubmittedUpdate = true;
             if(this.user.name && this.user.surname && this.user.dateOfBirth && this.user.gender){
                 let token = window.localStorage.getItem('token');
                 axios
@@ -124,7 +135,33 @@ Vue.component('app-my-profile', {
                 })
                 .then(response => {
                     this.full_name = this.user.name + ' ' + this.user.surname;
+                    this.validUpdate = true;
                 })
+            } else {
+                this.validUpdate = false;
+            }
+        },
+        updatePassword: function() {
+            this.isSubmittedPassword = true;
+            if(this.oldPassword == this.user.password){
+                if(this.oldPassword && this.newPassword){
+                    this.user.password = this.newPassword;
+                    let token = window.localStorage.getItem('token');
+                    axios
+                    .put('/users/' + this.username, this.user, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    }).then(response => {
+                        this.wrongPassword = false;
+                        this.validPassword = true;
+                    })  
+                } else {
+                    this.validPassword = false;
+                }
+            } else {
+                this.wrongPassword = true;
+                this.validPassword = false;
             }
         }
     }
