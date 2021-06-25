@@ -1,7 +1,8 @@
 Vue.component('app-profiles', {
     data: function(){
 		return {
-            users: []
+            users: [],
+            customers: []
         };
     },
     mounted: function(){
@@ -11,6 +12,13 @@ Vue.component('app-profiles', {
                 'Authorization': 'Bearer ' + token
             }})
             .then(response => this.users = response.data)
+            .catch(error =>  this.$router.push('/'));
+        
+        axios.get('/customers', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }})
+            .then(response => this.customers = response.data)
             .catch(error =>  this.$router.push('/'));
     },
     template: `
@@ -33,14 +41,14 @@ Vue.component('app-profiles', {
             <div class="container mt-3">
                 <div class="row justify-content-between">
                     <div class="col-md-9">
-                        <div class="card outline-card mb-3"  v-for="user in users">
+                        <div class="card outline-card mb-3"  v-for="user in users" :user="user">
                             <div class="row">
                                 <div class="col-md-10 mb-3">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ user.username }}</h5>
                                         <p class="card-text"><small>Ime i prezime: </small><small class="text-muted">{{ user.name }} {{ user.surname }}</small></p>
                                         <p class="card-text"><small class="text-muted">{{ user.role | enumToString }}</small></p>
-                                        
+                                        <p class="card-text"><small class="text-info">{{ customerType(user) }}</small></p>
                                     </div>
                                 </div>
                                 <div class="col-md-2 text-end">
@@ -71,15 +79,15 @@ Vue.component('app-profiles', {
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="filter" id="gold">
-                                <label class="form-check-label" for="gold">Zlatni korisnici</label>
+                                <label class="form-check-label" for="gold">Zlatni kupci</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="filter" id="silver">
-                                <label class="form-check-label" for="silver">Srebrni korisnici</label>
+                                <label class="form-check-label" for="silver">Srebrni kupci</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="filter" id="bronze">
-                                <label class="form-check-label" for="bronze">Bronzani korisnici</label>
+                                <label class="form-check-label" for="bronze">Bronzani kupci</label>
                             </div>
                         </div>
                         <hr>
@@ -114,7 +122,19 @@ Vue.component('app-profiles', {
         </div>
     `,
     methods: {
-
+        customerType: function(user){
+            let customerType = ''
+            this.customers.some(function(customer){
+                if(customer.user.username == user.username){
+                    if(customer.customerType){
+                        customerType = "Tip kupca: " + customer.customerType.type + ", " + customer.points + " bodova"
+                    }else {
+                        customerType = "Tip kupca: regular, " +  customer.points + " bodova"
+                    }
+                }
+            })
+            return customerType
+        }
     },
     filters: {
         enumToString: function(value) {

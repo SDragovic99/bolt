@@ -2,7 +2,7 @@ package beans;
 
 public class Customer {
 	private User user;
-	private CustomerType type;
+	private CustomerType customerType;
 	private int points;
 	
 	public Customer() {
@@ -12,7 +12,7 @@ public class Customer {
 	public Customer(User user, CustomerType type, int points) {
 		super();
 		this.user = user;
-		this.type = type;
+		this.customerType = type;
 		this.points = points;
 	}
 	
@@ -22,11 +22,11 @@ public class Customer {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public CustomerType getType() {
-		return type;
+	public CustomerType getCustomerType() {
+		return customerType;
 	}
-	public void setType(CustomerType type) {
-		this.type = type;
+	public void setCustomerType(CustomerType type) {
+		this.customerType = type;
 	}
 	public int getPoints() {
 		return points;
@@ -36,7 +36,7 @@ public class Customer {
 	}
 	@Override
 	public String toString() {
-		return user.getUsername() + "," + type.getType() + "," + points;
+		return user.getUsername() + "," + customerType.getType() + "," + points;
 	}
 	
 }

@@ -6,6 +6,7 @@ import static spark.Spark.staticFiles;
 import java.io.File;
 import java.security.Key;
 
+import controllers.CustomerController;
 import controllers.UserController;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +20,7 @@ public class App {
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		
 		new UserController(key);
+		new CustomerController(key);
 	}
 
 }

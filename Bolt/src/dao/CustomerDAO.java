@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +23,10 @@ public class CustomerDAO {
 		this.typeDAO = new CustomerTypeDAO();
 		this.customers = loadCustomers();
 	}
+	
+	public Collection<Customer> getAll(){
+		return customers.values();
+	}
 		
 	public Customer findCustomer(String id) {
 		return customers.containsKey(id) ? customers.get(id) : null;
@@ -37,8 +42,8 @@ public class CustomerDAO {
 		List<String[]> data = csvReader.read();
 		for (String[] strings : data) {
 			User user = userDAO.findUser(strings[0]);
-			CustomerType type = typeDAO.getType(strings[1]);
-			Customer customer = new Customer(user, type, Integer.parseInt(strings[2]));
+			CustomerType customerType = typeDAO.getType(strings[1]);
+			Customer customer = new Customer(user, customerType, Integer.parseInt(strings[2]));
 			customers.put(strings[0], customer);
 		}
 		
