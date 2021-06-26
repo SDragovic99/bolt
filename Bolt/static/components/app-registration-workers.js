@@ -81,13 +81,13 @@ Vue.component('app-registration-workers', {
                     }
                 })
                 .then(response => (router.push('/')))
-                .catch(error => { 
-                    if(error.response.status == 400){
-                        // TODO: Redirect to 400 page 
-                        router.push('/');
-                    } else {
+                .catch(error => {
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }else{
                         this.uniqueUsername = false;
-                    }
+                    }               
                 })
             }  
         }

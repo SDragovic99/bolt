@@ -12,14 +12,28 @@ Vue.component('app-profiles', {
                 'Authorization': 'Bearer ' + token
             }})
             .then(response => this.users = response.data)
-            .catch(error =>  this.$router.push('/'));
+            .catch(error => {
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }else{
+                    this.$router.push('/');
+                }               
+            })
         
         axios.get('/customers', {
             headers: {
                 'Authorization': 'Bearer ' + token
             }})
             .then(response => this.customers = response.data)
-            .catch(error =>  this.$router.push('/'));
+            .catch(error => {
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }else{
+                    this.$router.push('/');
+                }               
+            })
     },
     template: `
         <div>

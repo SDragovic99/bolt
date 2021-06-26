@@ -66,8 +66,8 @@ public class UserController {
 					System.out.println(e.getMessage());
 				}
 			}
-			res.status(400);
-			return "Bad request";
+			res.status(403);
+			return "Forbidden";
 		});
 		
 		put("/users/:username", (req, res) -> {
@@ -88,8 +88,8 @@ public class UserController {
 					System.out.println(e.getMessage());
 				}
 			}
-			res.status(400);
-			return "Bad request";
+			res.status(403);
+			return "Forbidden";
 		});
 		
 		post("/workers", (req, res) -> {
@@ -110,8 +110,8 @@ public class UserController {
 					System.out.println(e.getMessage());
 				}
 			}
-			res.status(400);
-			return "Bad request";
+			res.status(403);
+			return "Forbidden";
 		});
 		
 		post("/auth", (req, res) -> {

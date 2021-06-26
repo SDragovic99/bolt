@@ -27,8 +27,12 @@ Vue.component('app-my-profile', {
                 this.full_name = this.user.name + ' ' + this.user.surname;
             })
             .catch(error => {
-                window.localStorage.removeItem("token");
-                this.$router.push('/login');
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }else{
+                    this.$router.push('/');
+                }               
             })
     },
     template: `
@@ -119,6 +123,14 @@ Vue.component('app-my-profile', {
                     this.full_name = this.user.name + ' ' + this.user.surname;
                     this.validUpdate = true;
                 })
+                .catch(error => {
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }else{
+                        this.$router.push('/');
+                    }               
+                })
             } else {
                 this.validUpdate = false;
             }
@@ -134,9 +146,18 @@ Vue.component('app-my-profile', {
                         headers: {
                             'Authorization': 'Bearer ' + token
                         }
-                    }).then(response => {
+                    })
+                    .then(response => {
                         this.wrongPassword = false;
                         this.validPassword = true;
+                    })
+                    .catch(error => {
+                        if(error.response.status == 403){
+                            window.localStorage.removeItem("token");
+                            this.$router.push('/forbidden');
+                        }else{
+                            this.$router.push('/');
+                        }               
                     })  
                 } else {
                     this.validPassword = false;
