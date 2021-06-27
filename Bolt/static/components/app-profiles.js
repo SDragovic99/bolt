@@ -2,7 +2,14 @@ Vue.component('app-profiles', {
     data: function(){
 		return {
             users: [],
-            customers: []
+            customers: [],
+            searchedName: '',
+            searchedUsername: '',
+            searchedSurname: '',
+            selectedRoleFilters: [],
+            selectedTypeFilters: [],
+            sortBy: 'name',
+            order: 'asc'
         };
     },
     mounted: function(){
@@ -42,12 +49,10 @@ Vue.component('app-profiles', {
                 <div class="row">
                 <div class="col-md-9 mt-3">
                     <div class="input-group search-bar">
-                        <input type="text" class="form-control" placeholder="Korisničko ime" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa fa-search"></i></button>
-                        <input type="text" class="form-control" placeholder="Ime" aria-label="Recipient's name" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa fa-search"></i></button>
-                        <input type="text" class="form-control" placeholder="Prezime" aria-label="Recipient's surname" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa fa-search"></i></button>
+                        <input type="text" class="form-control" placeholder="Korisničko ime" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="searchedUsername">
+                        <input type="text" class="form-control" placeholder="Ime" aria-label="Recipient's name" aria-describedby="button-addon2" v-model="searchedName">
+                        <input type="text" class="form-control" placeholder="Prezime" aria-label="Recipient's surname" aria-describedby="button-addon2" v-model="searchedSurname">
+                        <span class="p-1 align-middle"><i class="fa fa-search"></i></span>
                     </div>
                 </div>    
                 </div>
@@ -55,7 +60,7 @@ Vue.component('app-profiles', {
             <div class="container mt-3">
                 <div class="row justify-content-between">
                     <div class="col-md-9">
-                        <div class="card outline-card mb-3"  v-for="user in users" :user="user">
+                        <div class="card outline-card mb-3"  v-for="user in filteredUsers">
                             <div class="row">
                                 <div class="col-md-10 mb-3">
                                     <div class="card-body">
@@ -76,59 +81,49 @@ Vue.component('app-profiles', {
                         <h5 class="text-left">Filteri</h5>
                         <div class="text-muted">
                         <div class="form-check">
-                                <input class="form-check-input" type="radio" name="filter" id="admin">
-                                <label class="form-check-label" for="admin">Administratori</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="filter" id="manager">
-                                <label class="form-check-label" for="manager">Menadžeri</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="filter" id="deliverer">
-                                <label class="form-check-label" for="deliverer">Dostavljači</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="filter" id="customer">
-                                <label class="form-check-label" for="customer">Kupci</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="filter" id="gold">
-                                <label class="form-check-label" for="gold">Zlatni kupci</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="filter" id="silver">
-                                <label class="form-check-label" for="silver">Srebrni kupci</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="filter" id="bronze">
-                                <label class="form-check-label" for="bronze">Bronzani kupci</label>
-                            </div>
+                            <input class="form-check-input" type="checkbox" id="admin" value="admin" v-model="selectedRoleFilters">
+                            <label class="form-check-label" for="admin">Administratori</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="manager" value="manager" v-model="selectedRoleFilters">
+                            <label class="form-check-label" for="manager">Menadžeri</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="deliverer" value="deliverer" v-model="selectedRoleFilters">
+                            <label class="form-check-label" for="deliverer">Dostavljači</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="customer" value="customer" v-model="selectedRoleFilters">
+                            <label class="form-check-label" for="customer">Kupci</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gold" value="gold" v-model="selectedTypeFilters">
+                            <label class="form-check-label" for="gold">Zlatni kupci</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="silver" value="silver" v-model="selectedTypeFilters">
+                            <label class="form-check-label" for="silver">Srebrni kupci</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="bronze" value="bronze" v-model="selectedTypeFilters">
+                            <label class="form-check-label" for="bronze">Bronzani kupci</label>
+                        </div>
                         </div>
                         <hr>
                         <h5 class="text-left">Sortiraj</h5>
                         <div>
-                            <select class="form-select" id="inputGroupSelect04">
-                                <option selected>Rastuće</option>
-                                <option value="1">Opadajuće</option>
+                            <select class="form-select" id="inputGroupSelect04" v-model="order">
+                                <option selected value="asc">Rastuće</option>
+                                <option value="desc">Opadajuće</option>
                             </select>
                             <div class="mt-2 text-muted">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sort" id="name">
-                                <label class="form-check-label" for="name">Ime</label>
+                                <select class="form-select" v-model="sortBy">
+                                    <option value="name">Po imenu</option>
+                                    <option value="surname">Po prezimenu</option>
+                                    <option value="username">Po korisničkom imenu</option>
+                                    <option value="points">Po broju bodova</option>
+                                </select>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sort" id="surname">
-                                <label class="form-check-label" for="surname">Prezime</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sort" id="username">
-                                <label class="form-check-label" for="username">Korisničko ime</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sort" id="points">
-                                <label class="form-check-label" for="points">Broj sakupljenih bodova</label>
-                            </div>
-                        </div>
                         </div>
                     </div>
                 </div>
@@ -160,6 +155,100 @@ Vue.component('app-profiles', {
                 return "Dostavljač"
             } 
             return "Kupac"
+        }
+    },
+    computed: {
+        filteredUsers(){
+            let temp = this.users
+
+            if(this.sortBy == 'points'){
+                let customers = this.customers
+                let users = []
+                customers = customers.sort((a, b) =>{
+                    return a.points - b.points
+                })
+                customers.forEach(customer => {
+                    temp.forEach(user => {
+                        if(user.username == customer.user.username){
+                            users.push(user)
+                        }
+                    })
+                })
+                temp = users
+            }
+
+            temp = temp.sort((a, b) => {
+                if(this.sortBy == 'name'){
+                    let fa = a.name.toLowerCase(), fb = b.name.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                } else if(this.sortBy == 'surname'){
+                    let fa = a.surname.toLowerCase(), fb = b.surname.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                } else if(this.sortBy == 'username'){
+                    let fa = a.username.toLowerCase(), fb = b.username.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                }
+            })
+
+            if(this.order == 'desc'){
+                temp.reverse()
+            }
+
+            if(this.searchedName && this.searchedName != ''){
+                temp = temp.filter((item) => {
+                    return item.name.toUpperCase().includes(this.searchedName.toUpperCase())
+                })
+            }
+
+            if(this.searchedSurname && this.searchedSurname != ''){
+                temp = temp.filter((item) => {
+                    return item.surname.toUpperCase().includes(this.searchedSurname.toUpperCase())
+                })
+            }
+
+            if(this.searchedUsername && this.searchedUsername != ''){
+                temp = temp.filter((item) => {
+                    return item.username.toUpperCase().includes(this.searchedUsername.toUpperCase())
+                })
+            }
+
+            if(this.selectedRoleFilters.length > 0){
+                let filteredByAllRoles = []
+                for(var i = 0; i < this.selectedRoleFilters.length; i++){
+                    let filteredByRole = []
+                    filteredByRole = temp.filter((item) => {
+                        return (item.role == this.selectedRoleFilters[i])
+                    })
+                    filteredByAllRoles.push(...filteredByRole)
+                }
+                temp = filteredByAllRoles
+            }
+
+            if(this.selectedTypeFilters.length > 0){
+                let filteredByAllTypes = []
+                for(var i = 0; i < this.selectedTypeFilters.length; i++){
+                    let filteredByType = []
+                    filteredByType = this.customers.filter((item) => {
+                        if(item.customerType){
+                            return (item.customerType.type == this.selectedTypeFilters[i])
+                        }
+                    })
+                    filteredByAllTypes.push(...filteredByType)
+                }
+                let users = []
+                filteredByAllTypes.forEach(customer => {
+                    this.users.forEach(user => {
+                        if(user.username == customer.user.username){
+                            users.push(user)
+                        }
+                    })
+                })
+                temp = users
+            }
+
+            
+
+            return temp
         }
     }
 });
