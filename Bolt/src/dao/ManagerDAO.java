@@ -32,6 +32,7 @@ public class ManagerDAO {
 	}
 	
 	public boolean checkIfManagerAvailable(String username) {
+		this.managers = loadManagers();
 		Manager manager = managers.get(username);
 		if(manager.getRestaurantId() == 0){
 			return true;
@@ -50,13 +51,13 @@ public class ManagerDAO {
 		return managers;
 	}
 
-	public void updateManager(Manager existingManager) {
-		managers.remove(existingManager.getUsername());
-		csvWriter.rewrite(existingManager.toString());
+	public void updateManager(Manager manager) {
+		managers.remove(manager.getUsername());
+		csvWriter.rewrite(manager.toString());
 		for(Manager currentManager : managers.values()) {
 			csvWriter.write(currentManager.toString());
 		}
 		
-		managers.put(existingManager.getUsername(), existingManager);
+		managers.put(manager.getUsername(), manager);
 	}
 }
