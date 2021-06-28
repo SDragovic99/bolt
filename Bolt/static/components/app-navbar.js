@@ -39,7 +39,7 @@ Vue.component('app-navbar', {
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="allProfiles">Korisnici</a></li>
                                 <li><a class="nav-link" href="#" v-on:click="register_worker">Registracija radnika</a></li>
-                                <li><a class="nav-link" aria-current="page" href="#">Dodaj novi restoran</a></li>
+                                <li><a class="nav-link" aria-current="page" href="#" v-on:click="newRestaurant">Dodaj novi restoran</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
                             </ul>
@@ -122,6 +122,10 @@ Vue.component('app-navbar', {
         allProfiles: function(event){
             event.preventDefault();
             this.$router.push('/all-users');
+        },
+        newRestaurant: function(event){
+            event.preventDefault();
+            this.$router.push('/new-restaurant');
         }
     }
 });

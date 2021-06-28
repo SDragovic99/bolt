@@ -7,11 +7,13 @@ public class Restaurant {
 	private Boolean isOpen;
 	private String imagePath;
 	private Location location;
+	private double rating;
+	
 	public Restaurant() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Restaurant(int id, String name, RestaurantType type, Boolean isOpen, String imagePath, Location location) {
+	public Restaurant(int id, String name, RestaurantType type, Boolean isOpen, String imagePath, Location location, double rating) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -19,7 +21,9 @@ public class Restaurant {
 		this.isOpen = isOpen;
 		this.imagePath = imagePath;
 		this.location = location;
+		this.rating = rating;
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -55,6 +59,17 @@ public class Restaurant {
 	}
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+	public double getRating() {
+		return rating;
+	}
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+	
+	@Override
+	public String toString() {
+		return id + "," + name + "," + type + "," + isOpen + "," + imagePath + "," + location.toString() + "," + rating;
 	}
 	
 }

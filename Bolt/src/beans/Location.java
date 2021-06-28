@@ -49,4 +49,9 @@ public class Location {
 		this.postalCode = postalCode;
 	}
 	
+	@Override
+	public String toString() {
+		return longitude + "," + latitude + "," + address + "," + city + "," + postalCode;
+	}
+	
 }

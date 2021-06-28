@@ -7,6 +7,8 @@ import java.io.File;
 import java.security.Key;
 
 import controllers.CustomerController;
+import controllers.ManagerController;
+import controllers.RestaurantController;
 import controllers.UserController;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -21,6 +23,8 @@ public class App {
 		
 		new UserController(key);
 		new CustomerController(key);
+		new ManagerController(key);
+		new RestaurantController(key);
 	}
 
 }

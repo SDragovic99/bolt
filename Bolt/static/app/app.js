@@ -5,6 +5,7 @@ const RegisterWorker = { template: '<app-registration-workers></app-registration
 const MyProfile = { template: '<app-my-profile></app-my-profile>'}
 const Profiles = { template: '<app-profiles></app-profiles>'}
 const Forbidden = { template: '<app-forbidden-page></app-forbidden-page>'}
+const NewRestaurant = { template: '<app-new-restaurant></app-new-restaurant>'}
 
 const router = new VueRouter({
 	mode: 'history',
@@ -15,7 +16,8 @@ const router = new VueRouter({
 		{ path: '/register-worker', name: 'register-worker', component: RegisterWorker},
 		{ path: '/my-profile', name: 'my-profile', component: MyProfile},
 		{ path: '/all-users', name: 'all-users', component: Profiles},
-		{ path: '/forbidden', name: 'forbidden', component: Forbidden}
+		{ path: '/forbidden', name: 'forbidden', component: Forbidden},
+		{ path: '/new-restaurant', name: 'new-restaurant', component: NewRestaurant}
 	  ]
 });
 

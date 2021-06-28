@@ -31,6 +31,14 @@ public class ManagerDAO {
 		csvWriter.write(manager.toString());
 	}
 	
+	public boolean checkIfManagerAvailable(String username) {
+		Manager manager = managers.get(username);
+		if(manager.getRestaurantId() == 0){
+			return true;
+		}
+		return false;
+	}
+	
 	public HashMap<String, Manager> loadManagers(){
 		HashMap<String, Manager> managers = new HashMap<>();
 		List<String[]> data = csvReader.read();
@@ -40,5 +48,15 @@ public class ManagerDAO {
 		}
 		
 		return managers;
+	}
+
+	public void updateManager(Manager existingManager) {
+		managers.remove(existingManager.getUsername());
+		csvWriter.rewrite(existingManager.toString());
+		for(Manager currentManager : managers.values()) {
+			csvWriter.write(currentManager.toString());
+		}
+		
+		managers.put(existingManager.getUsername(), existingManager);
 	}
 }
