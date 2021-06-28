@@ -55,7 +55,7 @@ Vue.component('app-new-restaurant', {
                             </div>
                             <div class="col-md-12">
                                 <label for="photo" class="form-label">Logo restorana</label>
-                                <input type="file" class="form-control" id="photo" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                                <input type="file" @change="imageAdded" class="form-control" id="photo" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
                             </div>
                             <div class="col-md-12">
                                 lokacija...
@@ -90,6 +90,19 @@ Vue.component('app-new-restaurant', {
                     }            
                 })
             }
+        },
+        imageAdded(e){
+            const file = e.target.files[0];
+            this.createBase64Image(file);
+        },
+        createBase64Image(file){
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                let img = e.target.result;
+                this.restaurantDTO.imagePath = img.split(",")[1];
+            }
+            reader.readAsDataURL(file);
         }
     }
 });

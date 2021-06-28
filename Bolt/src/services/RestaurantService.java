@@ -13,7 +13,7 @@ public class RestaurantService {
 	}
 
 	public Restaurant registerRestaurant(RestaurantDTO restaurantDTO) {
-		Restaurant newRestaurant = new Restaurant(restaurantDAO.generateId(), restaurantDTO.getName(), restaurantDTO.getType(), false, "TODO", new Location(0, 0, "ADDRESS", "CITY", "POSTALCODE"), 0);
+		Restaurant newRestaurant = new Restaurant(restaurantDAO.generateId(), restaurantDTO.getName(), restaurantDTO.getType(), false, restaurantDTO.getImagePath(), new Location(0, 0, "ADDRESS", "CITY", "POSTALCODE"), 0);
 		restaurantDAO.addRestaurant(newRestaurant);
 		return newRestaurant;
 	}
