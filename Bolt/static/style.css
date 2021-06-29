@@ -95,3 +95,29 @@ a img{
     position: relative;
     text-align: center;
 }
+#rating2{
+    font-size: 2rem;
+    font-weight: bold;
+}
+#delivery{
+    font-size: 12px !important;
+    color: black !important;
+}
+.card{
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+}
+.card img{
+    border-radius: 9%;
+}
+.btn-group{
+    width: 30%;
+}
+.fa { 
+    transition:.5s; 
+  }
+  
+  .fa:hover {
+  transform:scale(1.5); 
+  }

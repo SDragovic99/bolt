@@ -30,20 +30,32 @@ public class RestaurantController {
 		
 		post("/restaurants", (req, res) -> {
 			res.type("application/json");
-			RestaurantDTO restaurantDTO = gson.fromJson(req.body(), RestaurantDTO.class);
-			Restaurant newRestaurant = restaurantService.registerRestaurant(restaurantDTO);
-			if(newRestaurant == null) {
-				res.status(400);
-				return "Bad request";
+			
+			String auth = req.headers("Authorization");
+			if ((auth != null) && (auth.contains("Bearer "))) {
+				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
+				try {
+				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+				    RestaurantDTO restaurantDTO = gson.fromJson(req.body(), RestaurantDTO.class);
+					Restaurant newRestaurant = restaurantService.registerRestaurant(restaurantDTO);
+					if(newRestaurant == null) {
+						res.status(400);
+						return "Bad request";
+					}
+					if(managerService.updateManager(restaurantDTO.getUsername(), newRestaurant.getId()) == null) {
+						res.status(400);
+						return "Bad request";
+					}
+					return "SUCCESS";
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 			}
-			if(managerService.updateManager(restaurantDTO.getUsername(), newRestaurant.getId()) == null) {
-				res.status(400);
-				return "Bad request";
-			}
-			return "SUCCESS";
+			res.status(403);
+			return "Forbidden";
 		});
 		
-		get("/restaurants/:username", (req, res) -> {
+		get("/restaurants/manager/:username", (req, res) -> {
 			res.type("application/json");
 			
 			String auth = req.headers("Authorization");

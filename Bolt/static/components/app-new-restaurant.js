@@ -77,9 +77,7 @@ Vue.component('app-new-restaurant', {
                 let token = window.localStorage.getItem('token');
                 axios.post('/restaurants', this.restaurantDTO, { 
                     headers: {
-                        headers: {
-                            'Authorization': 'Bearer ' + token
-                        }
+                        'Authorization': 'Bearer ' + token
                     }
                 })
                 .then(response => (router.push("/")))
