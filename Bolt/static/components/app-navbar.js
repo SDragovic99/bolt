@@ -53,7 +53,7 @@ Vue.component('app-navbar', {
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
-                                <li><a class="nav-link" href="#">Moj restoran</a></li>
+                                <li><a class="nav-link" href="#" v-on:click="myRestaurant">Moj restoran</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
                             </ul>
@@ -126,6 +126,10 @@ Vue.component('app-navbar', {
         newRestaurant: function(event){
             event.preventDefault();
             this.$router.push('/new-restaurant');
+        },
+        myRestaurant: function(event){
+            event.preventDefault();
+            this.$router.push('/my-restaurant')
         }
     }
 });

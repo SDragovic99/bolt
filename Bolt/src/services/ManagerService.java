@@ -37,4 +37,9 @@ public class ManagerService {
 		}
 		return null;
 	}
+	
+	public int getManagersRestaurantId(String username) {
+		int restaurantId = managerDAO.getManagersRestaurantId(username);
+		return restaurantId;
+	}
 }

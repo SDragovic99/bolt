@@ -60,4 +60,9 @@ public class ManagerDAO {
 		
 		managers.put(manager.getUsername(), manager);
 	}
+
+	public int getManagersRestaurantId(String username) {
+		Manager manager = managers.get(username);
+		return manager.getRestaurantId();
+	}
 }

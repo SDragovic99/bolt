@@ -99,8 +99,7 @@ Vue.component('app-new-restaurant', {
             const reader = new FileReader();
 
             reader.onload = (e) => {
-                let img = e.target.result;
-                this.restaurantDTO.imagePath = img.split(",")[1];
+                this.restaurantDTO.imagePath = e.target.result;
             }
             reader.readAsDataURL(file);
         }
