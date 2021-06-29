@@ -78,5 +78,13 @@ public class RestaurantController {
 			res.status(403);
 			return "Forbidden";
 		});
+		
+		get("restaurants/:id", (req, res) -> {
+			res.type("application/json");
+			
+			Integer id = Integer.parseInt(req.params("id"));
+			Restaurant restaurant = restaurantService.findRestaurant(id);
+			return gson.toJson(restaurant);
+		});
 	}
 }

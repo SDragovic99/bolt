@@ -6,6 +6,7 @@ import java.security.Key;
 
 import com.google.gson.Gson;
 
+import beans.Manager;
 import io.jsonwebtoken.Jwts;
 import services.ManagerService;
 
@@ -30,6 +31,17 @@ public class ManagerController {
 			}
 			res.status(403);
 			return "Forbidden";
+		});
+		
+		get("/managers/:username", (req, res) -> {
+			res.type("application/json");
+			String username = req.params("username");
+			Manager manager = managerService.getManager(username);
+			if(manager == null) {
+				res.status(400);
+				return "User not found: " + username;
+			}
+			return gson.toJson(manager);
 		});
 	}
 

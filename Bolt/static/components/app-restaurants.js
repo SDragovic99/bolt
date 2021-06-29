@@ -91,7 +91,7 @@ Vue.component('app-restaurants', {
             <div class="row">
                 <div class="col-md-4 mt-2" v-for="restaurant in restaurants">
                     <div class="card">
-                        <a href="#" class="stretched-link"></a>
+                        <a href="#" class="stretched-link" :id="restaurant.id" v-on:click="restaurant_overview(restaurant)"></a>
                             <div class="my-container">
                                 <img :src="restaurant.imagePath" class="card-img-top" v-bind:style="{opacity: restaurant.isOpen ? 1 : 0.3}">
                                 <div class="centered" v-bind:style="{visibility : restaurant.isOpen ? 'hidden' : 'visible'}">ZATVOREN</div>
@@ -103,7 +103,7 @@ Vue.component('app-restaurants', {
                                 <p class="address">{{restaurant.location.address}}, {{restaurant.location.city}}, {{restaurant.location.postalCode}}</p>
                             </div>
                             <div class="rating-wrapper">
-                                <p id="rating" class="card-text"><img src="assets/smiling.png"><span class="align-middle"><small class="text-muted"> {{restaurant.rating}}</small></span></p>
+                                <p id="rating" class="card-text"><img src="/assets/smiling.png"><span class="align-middle"><small class="text-muted"> {{restaurant.rating}}</small></span></p>
                             </div>
                         </a>    
                     </div>
@@ -112,6 +112,11 @@ Vue.component('app-restaurants', {
         </div>
     </div>
     `,
+    methods: {
+        restaurant_overview: function(restaurant){
+            this.$router.push('/restaurant-overview/' + restaurant.id);
+        }
+    },
     filters: {
         enumToString: function(value) {
             if(value == "chinese"){

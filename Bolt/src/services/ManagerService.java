@@ -28,6 +28,10 @@ public class ManagerService {
 		return managers;
 	}
 	
+	public Manager getManager(String username) {
+		return managerDAO.findManager(username);
+	}
+	
 	public Manager updateManager(String username, int restaurantId) {
 		Manager existingManager = managerDAO.findManager(username);
 		if(existingManager != null) {
