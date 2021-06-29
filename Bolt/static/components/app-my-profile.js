@@ -44,14 +44,14 @@ Vue.component('app-my-profile', {
         </div>		
 	</div>
 
-    <div id="my-profile" class="container">
+    <div class="container">
         <div class="row justify-content-around">
             <div class="col-md-2 shadow-lg p-5 mb-5 bg-body rounded">
                 <div class="text-center"><i class="fa fa-user-circle fa-5x"></i></div>
-                <h5 class="fw-bold text-center">{{full_name}}</h5>
+                <h5 class="fw-bold text-center nunito-heading">{{full_name}}</h5>
             </div>
             <div class="col-md-9 shadow-lg p-5 mb-5 bg-body rounded justify-content-center">
-                <h5 class="text-left">Vaši detalji</h5>
+                <h5 class="text-left nunito-heading">Vaši detalji</h5>
                 <p class="text-muted">Da li želite da promenite nešto? Ne zaboravite da kliknete "Snimi izmene" na kraju forme</p>
                 <form class="row g-3">
                     <div class="col-md-5">
@@ -84,7 +84,7 @@ Vue.component('app-my-profile', {
             </div>
             <div class="col-md-2"></div>
             <div class="col-md-9 shadow-lg p-5 mb-5 bg-body rounded">
-                <h5 id="password-header" class="text-left">Promena lozinke</h5>
+                <h5 id="password-header nunito-heading" class="text-left">Promena lozinke</h5>
                 <div class="row g-3">
                     <div class="col-md-5">
                         <label for="password" class="form-label">Trenutna šifra</label>

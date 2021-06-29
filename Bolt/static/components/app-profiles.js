@@ -77,8 +77,8 @@ Vue.component('app-profiles', {
                             </div>                           
                         </div>                       
                     </div>
-                    <div id="filter-section" class="col-md-2">
-                        <h5 class="text-left">Filteri</h5>
+                    <div class="col-md-2">
+                        <h5 class="text-left nunito-heading">Filteri</h5>
                         <div class="text-muted">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="admin" value="admin" v-model="selectedRoleFilters">
@@ -110,7 +110,7 @@ Vue.component('app-profiles', {
                         </div>
                         </div>
                         <hr>
-                        <h5 class="text-left">Sortiraj</h5>
+                        <h5 class="text-left nunito-heading">Sortiraj</h5>
                         <div>
                             <select class="form-select" id="inputGroupSelect04" v-model="order">
                                 <option selected value="asc">Rastuće</option>

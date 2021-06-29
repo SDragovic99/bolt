@@ -2,6 +2,7 @@ package services;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 
 import beans.Location;
 import beans.Restaurant;
@@ -20,7 +21,7 @@ public class RestaurantService {
 		int restaurantId = restaurantDAO.generateId();
 		String path = "assets/restaurant_images/restaurant-" + restaurantId + ".jpg";
 		decoder.Base64DecodeAndSave(restaurantDTO.getImagePath(), path);
-		Restaurant newRestaurant = new Restaurant(restaurantId, restaurantDTO.getName(), restaurantDTO.getType(), false, path, new Location(0, 0, "ADDRESS", "CITY", "POSTALCODE"), 0);
+		Restaurant newRestaurant = new Restaurant(restaurantId, restaurantDTO.getName(), restaurantDTO.getType(), true, path, new Location(0, 0, "ADDRESS", "CITY", "POSTALCODE"), 0);
 		restaurantDAO.addRestaurant(newRestaurant);
 		return newRestaurant;
 	}
@@ -28,6 +29,10 @@ public class RestaurantService {
 	public Restaurant findRestaurant(int id) {
 		Restaurant restaurant = restaurantDAO.findRestaurant(id);
 		return restaurant;
+	}
+	
+	public Collection<Restaurant> getAll(){
+		return restaurantDAO.getAll();
 	}
 
 }

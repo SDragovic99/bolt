@@ -57,15 +57,41 @@ a img{
 	background-position: center;
     color: white;
 }
-#my-profile h5{
+.nunito-heading{
     font-family: 'Nunito', sans-serif;
 }
 #password-header{
     margin-bottom: 25px;
 }
-#filter-section h5{
-    font-family: 'Nunito', 'sans-serif';
-}
-.search-bar button{
+.btn-group button{
     border-color: #ced4da;
+    color: #000;
+}
+.rating-wrapper{
+    width: 100%;
+    border-top: 0.0625rem dashed rgba(32, 33, 37, 0.12);;
+    margin: 0px;
+}
+#rating{
+    padding: 10px
+}
+.col-4{
+    margin-top: 1rem;
+    margin-bottom:1rem;
+}
+.card-body{
+    padding-bottom: 0.5rem;
+}
+.address{
+    margin-bottom: 0.2rem;
+}
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.my-container{
+    position: relative;
+    text-align: center;
 }

@@ -23,6 +23,11 @@ public class RestaurantController {
 		this.restaurantService = new RestaurantService();
 		this.managerService = new ManagerService();
 		
+		get("/restaurants", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(restaurantService.getAll());
+		});
+		
 		post("/restaurants", (req, res) -> {
 			res.type("application/json");
 			RestaurantDTO restaurantDTO = gson.fromJson(req.body(), RestaurantDTO.class);

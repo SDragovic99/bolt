@@ -7,6 +7,7 @@ const Profiles = { template: '<app-profiles></app-profiles>'}
 const Forbidden = { template: '<app-forbidden-page></app-forbidden-page>'}
 const NewRestaurant = { template: '<app-new-restaurant></app-new-restaurant>'}
 const MyRestaurant = { template: '<app-restaurant-overview></app-restaurant-overview>'}
+const Restaurants = { template: '<app-restaurants></app-restaurants>'}
 
 const router = new VueRouter({
 	mode: 'history',
@@ -19,7 +20,8 @@ const router = new VueRouter({
 		{ path: '/all-users', name: 'all-users', component: Profiles},
 		{ path: '/forbidden', name: 'forbidden', component: Forbidden},
 		{ path: '/new-restaurant', name: 'new-restaurant', component: NewRestaurant},
-		{ path: '/my-restaurant', name: 'my-restaurant', component: MyRestaurant}
+		{ path: '/my-restaurant', name: 'my-restaurant', component: MyRestaurant},
+		{ path: '/discover-restaurants', name: 'discover-restaurants', component: Restaurants}
 	  ]
 });
 

@@ -1,3 +1,6 @@
-1,Novovovo,italian,false,assets/restaurant_images/restaurant-1.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,0.0
-2,Restoranko,barbeque,false,assets/restaurant_images/restaurant-2.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,0.0
-3,Korestoran,chinese,false,assets/restaurant_images/restaurant-3.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,0.0
+1,Aloha Poke,chinese,true,assets/restaurant_images/restaurant-1.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,9.0
+2,Italiano,italian,true,assets/restaurant_images/restaurant-2.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,8.2
+3,Greda,barbeque,false,assets/restaurant_images/restaurant-3.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,9.4
+4,Pizzato,italian,true,assets/restaurant_images/restaurant-4.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,9.1
+5,Udon,chinese,false,assets/restaurant_images/restaurant-5.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,9.0
+6,Vegan,vegan,false,assets/restaurant_images/restaurant-6.jpg,0.0,0.0,ADDRESS,CITY,POSTALCODE,8.4
