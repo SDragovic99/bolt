@@ -2,7 +2,9 @@ Vue.component('app-restaurant-overview', {
     data: function(){
         return {
             restaurant: {},
-            restaurantId: this.$route.params.id
+            restaurantId: this.$route.params.id, 
+            manager: parseJwt(window.localStorage.getItem('token')).sub,
+            role: parseJwt(window.localStorage.getItem('token')).Role
         };
     },
     mounted: function() {
@@ -13,7 +15,18 @@ Vue.component('app-restaurant-overview', {
             })
             .catch(error => {
                 this.$router.push('/');
+        });
+        if(this.role == 'manager'){
+            axios
+                .get('/managers/' + this.manager)
+                .then(response => {
+                    this.manager = response.data;
+                })
+                .catch(error => {
+                    this.$router.push('/');
             })
+        }
+        
     }, 
     template: `
     <div>
@@ -32,7 +45,7 @@ Vue.component('app-restaurant-overview', {
 
     <div class="container">
         <div class="row justify-content-right">
-            <div class="col-md-2"></div>
+            <div class="col-md-2"><button class="btn btn-outline-primary" v-if="manager.restaurantId == restaurantId">Dodaj nove artikle</button></div>
             <div class="col-md-7 col-sm-8">
                 <div class="card card-rounded">
                     <div class="row card-body">
@@ -78,7 +91,7 @@ Vue.component('app-restaurant-overview', {
                             <p class="card-text"><small class="text-muted">RSD 500.00</small></p>
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <button type="button" class="btn btn-outline-primary">-</button>
-                                <button type="button" class="btn btn-outline-primary" v-on:click="newArticle">+</button>
+                                <button type="button" class="btn btn-outline-primary" v-on:click="newProduct">+</button>
                               </div>
                         </div>
                         <img src="/assets/bowl2.jpg" class="col-sm-6">
@@ -103,8 +116,8 @@ Vue.component('app-restaurant-overview', {
         }
     },
     methods: {
-        newArticle: function(){
-            this.$router.push('/new-article/' + this.restaurantId);
+        newProduct: function(){
+            this.$router.push('/restaurant-overview/' + this.restaurantId + '/new-product');
         }
     }
 })

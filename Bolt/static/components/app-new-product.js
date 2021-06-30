@@ -1,7 +1,7 @@
-Vue.component('app-new-article', {
+Vue.component('app-new-product', {
     data: function(){
         return {
-            article: {id: this.$route.params.id, name: null, price: null, type: null, quantity: null, description: null, imagePath: null},
+            product: {restaurantId: this.$route.params.id, name: null, price: null, type: null, quantity: null, description: null, imagePath: null},
             isSubmitted: false,
             uniqueName: true
         }
@@ -17,29 +17,29 @@ Vue.component('app-new-article', {
                         <form class="row g-3">
                             <div class="col-md-12">
                                 <label for="name" class="form-label">Naziv artikla</label>
-                                <input type="text" class="form-control" id="name" placeholder="Ime" v-model="article.name" v-bind:class="{'form-control':true, 'is-invalid' : !article.name && isSubmitted}">
+                                <input type="text" class="form-control" id="name" placeholder="Ime" v-model="product.name" v-bind:class="{'form-control':true, 'is-invalid' : !product.name && isSubmitted}">
                                 <div class="invalid-feedback">Popunite polje</div>    
                             </div>
                             <div class="col-md-12">
                                 <label for="price" class="form-label">Cena artikla</label>
-                                <input type="number" class="form-control" id="price" placeholder="Cena" v-model="article.price" v-bind:class="{'form-control':true, 'is-invalid' : !article.price && isSubmitted}">
+                                <input type="number" class="form-control" id="price" placeholder="Cena" v-model="product.price" v-bind:class="{'form-control':true, 'is-invalid' : !product.price && isSubmitted}">
                                 <div class="invalid-feedback">Popunite polje</div>    
                             </div>
                             <div class="col-md-12">
                                 <label for="type" class="form-label">Tip artikla</label>
-                                <select id="type" v-model="article.type" v-bind:class="{'form-select':true, 'is-invalid': !article.type && isSubmitted}">
-                                    <option value="dish">Jelo</option>
+                                <select id="type" v-model="product.type" v-bind:class="{'form-select':true, 'is-invalid': !product.type && isSubmitted}">
+                                    <option value="food">Jelo</option>
                                     <option value="drink">Piće</option>
                                 </select>
                                 <div class="invalid-feedback">Odaberite tip artikla</div>
                             </div>
                             <div class="col-md-12">
                                 <label for="description" class="form-label">Opis artikla</label>
-                                <input type="text" class="form-control" id="description" placeholder="Opis" v-model="article.description">
+                                <input type="text" class="form-control" id="description" placeholder="Opis" v-model="product.description">
                             </div>
                             <div class="col-md-12">
                                 <label for="quantity" class="form-label">Količina</label>
-                                <input type="number" class="form-control" id="price" placeholder="Količina" v-model="article.quantity">
+                                <input type="number" class="form-control" id="price" placeholder="Količina" v-model="product.quantity">
                             </div>
                             <div class="col-md-12">
                                 <label for="photo" class="form-label">Slika artikla</label>
@@ -47,7 +47,7 @@ Vue.component('app-new-article', {
                             </div>
                             
                             <div class="d-grid gap-2">
-                                <button class="btn btn-primary" type="button" v-on:click="createArticle">Kreiraj artikal</button>
+                                <button class="btn btn-primary" type="button" v-on:click="createProduct">Kreiraj artikal</button>
                             </div>
                             <div class="col-md-12 text-danger text-center" :style="{visibility: uniqueName ? 'hidden' : 'visible'}">
                                 Ime artikla je već zauzeto.
@@ -59,17 +59,17 @@ Vue.component('app-new-article', {
         </div>
     `,
     methods: {
-        createArticle: function(){
+        createProduct: function(){
             this.isSubmitted = true;
-            if(this.article.name && this.article.price && this.article.type && this.article.imagePath){
+            if(this.product.name && this.product.price && this.product.type && this.product.imagePath){
                 let token = window.localStorage.getItem('token');
                 axios
-                .post("/articles", this.article, {
+                .post("/restaurants/" + this.product.restaurantId + "/products", this.product, {
                     headers: {
                         'Authorization': 'Bearer ' + token
                     }
                 })
-                .then(response => (router.push('/restaurant-overview/' + this.article.id)))
+                .then(response => (router.push('/restaurant-overview/' + this.product.restaurantId)))
                 .catch(error => {
                     if(error.response.status == 403){
                         window.localStorage.removeItem("token");
@@ -88,7 +88,7 @@ Vue.component('app-new-article', {
             const reader = new FileReader();
 
             reader.onload = (e) => {
-                this.article.imagePath = e.target.result;
+                this.product.imagePath = e.target.result;
             }
             reader.readAsDataURL(file);
         }

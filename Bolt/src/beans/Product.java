@@ -1,22 +1,22 @@
 package beans;
 
-public class Article {
-	private int id;
+public class Product {
+	private int restaurantId;
 	private String name;
 	private double price;
-	private ArticleType type;
+	private ProductType type;
 	private int quantity;
 	private String description;
 	private String imagePath;
 	
-	public Article() {
+	public Product() {
 		super();
 	}
 
-	public Article(int id, String name, double price, ArticleType type, int quantity, String description,
+	public Product(int restaurantId, String name, double price, ProductType type, int quantity, String description,
 			String imagePath) {
 		super();
-		this.id = id;
+		this.restaurantId = restaurantId;
 		this.name = name;
 		this.price = price;
 		this.type = type;
@@ -25,12 +25,12 @@ public class Article {
 		this.imagePath = imagePath;
 	}
 
-	public int getId() {
-		return id;
+	public int getRestaurantId() {
+		return restaurantId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setRestaurantId(int id) {
+		this.restaurantId = id;
 	}
 
 	public String getName() {
@@ -49,11 +49,11 @@ public class Article {
 		this.price = price;
 	}
 
-	public ArticleType getType() {
+	public ProductType getType() {
 		return type;
 	}
 
-	public void setType(ArticleType type) {
+	public void setType(ProductType type) {
 		this.type = type;
 	}
 
@@ -83,7 +83,7 @@ public class Article {
 
 	@Override
 	public String toString() {
-		return id + "," + name + "," + price + "," + type + "," + quantity + "," + description + "," + imagePath;
+		return restaurantId + "," + name + "," + price + "," + type + "," + quantity + "," + description + "," + imagePath;
 	}
 
 }

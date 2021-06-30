@@ -5,6 +5,7 @@ import static spark.Spark.post;
 
 import com.google.gson.Gson;
 
+import beans.Product;
 import beans.Restaurant;
 import dto.RestaurantDTO;
 import io.jsonwebtoken.Jwts;
@@ -12,11 +13,13 @@ import io.jsonwebtoken.Jwts;
 import java.security.Key;
 
 import services.ManagerService;
+import services.ProductService;
 import services.RestaurantService;
 
 public class RestaurantController {
 	private RestaurantService restaurantService;
 	private ManagerService managerService;
+	private ProductService productService;
 	private static Gson gson = new Gson();
 	
 	public RestaurantController(Key key) {
@@ -56,7 +59,15 @@ public class RestaurantController {
 			return "Forbidden";
 		});
 		
-		get("/restaurants/manager/:username", (req, res) -> {
+		get("restaurants/:id", (req, res) -> {
+			res.type("application/json");
+			
+			Integer id = Integer.parseInt(req.params("id"));
+			Restaurant restaurant = restaurantService.findRestaurant(id);
+			return gson.toJson(restaurant);
+		});
+		
+		post("/restaurants/:id/products", (req, res) -> {
 			res.type("application/json");
 			
 			String auth = req.headers("Authorization");
@@ -64,28 +75,20 @@ public class RestaurantController {
 				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
 				try {
 				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
-				    String username = req.params("username");
-				    int restaurantId = managerService.getManagersRestaurantId(username);
-				    Restaurant restaurant = restaurantService.findRestaurant(restaurantId);
-				    if(restaurant == null) {
-				    	res.status(400);
-				    	return "Restaurant not found";
-				    }
-				    return gson.toJson(restaurant);
+					Product product = gson.fromJson(req.body(), Product.class);
+					productService = new ProductService();
+					if(productService.addProduct(product) == null) {
+						res.status(400);
+						return "Bad request";
+					}
+					res.status(200);
+					return "SUCCESS";
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
 			}
 			res.status(403);
 			return "Forbidden";
-		});
-		
-		get("restaurants/:id", (req, res) -> {
-			res.type("application/json");
-			
-			Integer id = Integer.parseInt(req.params("id"));
-			Restaurant restaurant = restaurantService.findRestaurant(id);
-			return gson.toJson(restaurant);
 		});
 	}
 }
