@@ -42,6 +42,7 @@ public class RestaurantController {
 						res.status(400);
 						return "Bad request";
 					}
+					managerService = new ManagerService();
 					if(managerService.updateManager(restaurantDTO.getUsername(), newRestaurant.getId()) == null) {
 						res.status(400);
 						return "Bad request";

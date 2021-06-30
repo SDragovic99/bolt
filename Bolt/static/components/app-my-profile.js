@@ -40,15 +40,15 @@ Vue.component('app-my-profile', {
     <app-navbar></app-navbar>
     <div id="header" class="container-fluid py-5">
         <div class="container p-3 mt-5 col-md-11 justify-content-bottom">
-            <h1 class="fw-bold">Moj nalog</h1>
+            <h1 class="fw-bold nunito-heading">Moj nalog</h1>
         </div>		
 	</div>
 
     <div class="container">
         <div class="row justify-content-around">
-            <div class="col-md-2 shadow-lg p-5 mb-5 bg-body rounded">
-                <div class="text-center"><i class="fa fa-user-circle fa-5x"></i></div>
-                <h5 class="fw-bold text-center nunito-heading">{{full_name}}</h5>
+            <div class="col-md-2 shadow-lg p-5 mb-5 bg-body rounded" style="height: 50%;">
+                <div class="text-center"><img src="/assets/user.png"></div>
+                <h5 class="text-center">{{full_name}}</h5>
             </div>
             <div class="col-md-9 shadow-lg p-5 mb-5 bg-body rounded justify-content-center">
                 <h5 class="text-left nunito-heading">Vaši detalji</h5>

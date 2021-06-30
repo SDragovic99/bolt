@@ -132,7 +132,9 @@ Vue.component('app-navbar', {
             let username = parseJwt(window.localStorage.getItem('token')).sub;
             axios.get('/managers/' + username)
                 .then(response => {
-                    this.$router.push('/restaurant-overview/' + response.data.restaurantId)
+                    if(response.data.restaurantId != 0){
+                        this.$router.push('/restaurant-overview/' + response.data.restaurantId)
+                    }
                 })
                 .catch(error => {
                     this.$router.push('/')

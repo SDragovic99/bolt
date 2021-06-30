@@ -47,6 +47,12 @@ hr {
     border: 0;
     margin: 8% 0;
 }
+.hr-breadcrumbs{
+    margin: 8% 0px 2% 0px;
+}
+.breadcrumbs{
+    margin-bottom: 5%;
+}
 a img{
     width: 25%;
     height: 100%;
@@ -56,6 +62,7 @@ a img{
     background-size: cover;
 	background-position: center;
     color: white;
+    opacity: 0.6;
 }
 .nunito-heading{
     font-family: 'Nunito', sans-serif;

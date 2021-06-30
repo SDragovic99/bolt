@@ -15,7 +15,6 @@ public class ManagerController {
 	private static Gson gson = new Gson();
 	
 	public ManagerController(Key key) {
-		this.managerService = new ManagerService();
 		
 		get("/managers", (req, res) -> {
 			res.type("application/json");
@@ -24,6 +23,7 @@ public class ManagerController {
 				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
 				try {
 				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+				    managerService = new ManagerService();
 					return gson.toJson(managerService.getManagers());
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
@@ -36,6 +36,7 @@ public class ManagerController {
 		get("/managers/:username", (req, res) -> {
 			res.type("application/json");
 			String username = req.params("username");
+			managerService = new ManagerService();
 			Manager manager = managerService.getManager(username);
 			if(manager == null) {
 				res.status(400);
