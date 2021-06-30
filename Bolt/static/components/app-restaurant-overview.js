@@ -78,7 +78,7 @@ Vue.component('app-restaurant-overview', {
                             <p class="card-text"><small class="text-muted">RSD 500.00</small></p>
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <button type="button" class="btn btn-outline-primary">-</button>
-                                <button type="button" class="btn btn-outline-primary">+</button>
+                                <button type="button" class="btn btn-outline-primary" v-on:click="newArticle">+</button>
                               </div>
                         </div>
                         <img src="/assets/bowl2.jpg" class="col-sm-6">
@@ -100,6 +100,11 @@ Vue.component('app-restaurant-overview', {
                 return "Veganski"
             } 
             return "Italijanski"
+        }
+    },
+    methods: {
+        newArticle: function(){
+            this.$router.push('/new-article/' + this.restaurantId);
         }
     }
 })
