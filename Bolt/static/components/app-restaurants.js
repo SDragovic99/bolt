@@ -1,7 +1,14 @@
 Vue.component('app-restaurants', {
     data: function(){
         return {
-            restaurants: []
+            restaurants: [],
+            searchedName: '',
+            searchedCity: '',
+            selectedType: 'default',
+            searchedRating: '',
+            selectedFilters: [],
+            order: 'asc',
+            sortBy: 'default'
         }
     },
     mounted: function(){
@@ -23,15 +30,16 @@ Vue.component('app-restaurants', {
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <div class="input-group search-bar">
-                        <input type="text" class="form-control" placeholder="Naziv restorana">
-                        <input type="text" class="form-control" placeholder="Grad">
-                        <select class="form-select">
-                            <option selected value="italian">Italijanski</option>
+                        <input type="text" class="form-control" placeholder="Naziv restorana" v-model="searchedName">
+                        <input type="text" class="form-control" placeholder="Grad" v-model="searchedCity">
+                        <select class="form-select" v-model="selectedType">
+                            <option selected value="default">Tip</option>
+                            <option value="italian">Italijanski</option>
                             <option value="chinese">Kineski</option>
                             <option value="barbeque">Roštilj</option>
                             <option value="vegan">Veganski</option>
                         </select>                          
-                        <input type="number" class="form-control" placeholder="Prosečna ocena">
+                        <input type="number" class="form-control" placeholder="Prosečna ocena" v-model="searchedRating">
                         <span class="p-1 align-middle"><i class="fa fa-search"></i></span>
                     </div>
                 </div> 
@@ -46,25 +54,25 @@ Vue.component('app-restaurants', {
                         <div class="row">
                             <div class="col">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="italian">
+                                    <input class="form-check-input" type="checkbox" id="italian" value="italian" v-model="selectedFilters">
                                     <label class="form-check-label" for="italian">Italijanski</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="chinese">
+                                    <input class="form-check-input" type="checkbox" id="chinese" value="chinese" v-model="selectedFilters">
                                     <label class="form-check-label" for="chinese">Kineski</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="barbeque">
+                                    <input class="form-check-input" type="checkbox" id="barbeque" value="barbeque" v-model="selectedFilters">
                                     <label class="form-check-label" for="barbeque">Roštilj</label>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="vegan">
+                                    <input class="form-check-input" type="checkbox" id="vegan" value="vegan" v-model="selectedFilters">
                                     <label class="form-check-label" for="vegan">Veganski</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="open">
+                                    <input class="form-check-input" type="checkbox" id="open" value="open" v-model="selectedFilters">
                                     <label class="form-check-label" for="open">Otvoreni</label>
                                 </div>
                             </div>
@@ -73,13 +81,14 @@ Vue.component('app-restaurants', {
                 </div>
                 <div class="col">
                     <div class="collapse" id="collapse2">
-                        <select class="form-select" id="inputGroupSelect04">
-                            <option selected value="asc">Rastuće</option>
+                        <select class="form-select" id="inputGroupSelect04" v-model="order">
+                            <option value="asc">Rastuće</option>
                             <option value="desc">Opadajuće</option>
                         </select>
                         <div class="mt-2 text-muted">
-                            <select class="form-select">
-                                <option selected value="name">Po nazivu</option>
+                            <select class="form-select" v-model="sortBy">
+                                <option value="default">Sortiraj po...</option>
+                                <option value="name">Po nazivu</option>
                                 <option value="location">Po lokaciji</option>
                                 <option value="rating">Po prosečnoj oceni</option>
                             </select>
@@ -89,9 +98,9 @@ Vue.component('app-restaurants', {
             </div>  
             <h4 class="nunito-heading">Naši restorani</h4>
             <div class="row">
-                <div class="col-md-4 mt-2" v-for="restaurant in restaurants">
+                <div class="col-md-4 mt-2" v-for="restaurant in filteredRestaurants">
                     <div class="card">
-                        <a href="#" class="stretched-link" :id="restaurant.id" v-on:click="restaurant_overview(restaurant)"></a>
+                        <a href="#" class="stretched-link" :id="restaurant.id" v-on:click.prevent="restaurant_overview(restaurant)"></a>
                             <div class="my-container">
                                 <img :src="restaurant.imagePath" class="card-img-top" v-bind:style="{opacity: restaurant.isOpen ? 1 : 0.3}">
                                 <div class="centered" v-bind:style="{visibility : restaurant.isOpen ? 'hidden' : 'visible'}">ZATVOREN</div>
@@ -127,6 +136,73 @@ Vue.component('app-restaurants', {
                 return "Veganski"
             } 
             return "Italijanski"
+        }
+    },
+    computed: {
+        filteredRestaurants(){
+            let temp = this.restaurants
+
+            if(this.searchedName && this.searchedName != ''){ 
+                temp = temp.filter((item) => {
+                    return item.name.toUpperCase().includes(this.searchedName.toUpperCase())
+                })
+            }
+
+            if(this.searchedCity && this.searchedCity != ''){ 
+                temp = temp.filter((item) => {
+                    return item.location.city.toUpperCase().includes(this.searchedCity.toUpperCase())
+                })
+            }
+
+            if(this.selectedType && this.selectedType != 'default'){
+                temp = temp.filter((item) =>{
+                    return (item.type == this.selectedType)
+                })
+            }
+
+            if(this.searchedRating){
+                temp = temp.filter((item) =>{
+                    return (item.rating == this.searchedRating)
+                })
+            }
+
+            if(this.selectedFilters.length > 0){
+                let filteredByAll = []
+                for(var i = 0; i < this.selectedFilters.length; i++){
+                    let filteredByOne = []
+                    filteredByOne = temp.filter((item) => {
+                        if(this.selectedFilters[i] == 'open'){
+                            return (item.isOpen === true)
+                        }
+                        return (item.type == this.selectedFilters[i])
+                    })
+                    filteredByAll.push(...filteredByOne)
+                }
+                temp = [ ...new Set(filteredByAll)]
+            }
+
+            temp = temp.sort((a, b) => {
+                if(this.sortBy == 'name'){
+                    let fa = a.name.toLowerCase(), fb = b.name.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                } else if(this.sortBy == 'location'){
+                    let fa = a.location.city.toLowerCase(), fb = b.location.city.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                }
+            })
+
+            if(this.sortBy == 'rating'){
+                temp = temp.sort((a, b) => {
+                    return a.rating - b.rating
+                })
+            }
+
+            if(this.order == 'desc'){
+                temp.reverse()
+            }
+            
+
+            return temp
         }
     }
 })

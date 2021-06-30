@@ -21,6 +21,7 @@ Vue.component('app-restaurant-overview', {
     <div v-bind:style="{ 'backgroundImage': 'url(/' + restaurant.imagePath + ')', 'background-size': 'cover', 'background-position': 'center', 'color': 'white', opacity: 0.6 }" class="container-fluid py-5">
         <div class="container p-3 mt-5 col-md-11 justify-content-bottom">
             <h1 class="fw-bold nunito-heading">{{ restaurant.name }}</h1>
+            <p>{{restaurant.type | enumToString}}</p>
             <button id="delivery" class="btn btn-light btn-sm" disabled>DOSTAVA: 99.00</button>
         </div>		
     </div>
@@ -89,7 +90,16 @@ Vue.component('app-restaurant-overview', {
 
     </div>
     `,
-    methods: {
-
+    filters: {
+        enumToString: function(value) {
+            if(value == "chinese"){
+                return "Kineski"
+            } else if(value == "barbeque"){
+                return "Roštilj"
+            } else if(value == "vegan"){
+                return "Veganski"
+            } 
+            return "Italijanski"
+        }
     }
 })
