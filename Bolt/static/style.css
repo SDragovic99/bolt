@@ -121,4 +121,27 @@ a img{
 .quantity-btn{
     width: 30%;
 }
+.outline-card-gray{
+    border-radius: .25rem;
+    border: 1px solid #eee;
+}
+.plus-btn{
+    padding: 0;
+}
+.fs{
+    font-size: .95em;
+    color: rgba(60, 60, 61, 0.64);
+    font-weight: light;
+}
+.outline-card-gray{
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+}
+.outline-card-gray img{
+    border-radius: 9%;
+}
+.btn-group40{
+    width: 40%;
+}
 

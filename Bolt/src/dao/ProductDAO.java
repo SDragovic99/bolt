@@ -1,7 +1,9 @@
 package dao;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import beans.Product;
 import beans.ProductType;
@@ -22,10 +24,16 @@ public class ProductDAO {
 		return products.containsKey(id) ? products.get(id) : null;
 	}
 	
-	public void addProduct(Product article) {
-		String id = article.getName() + Integer.toString(article.getRestaurantId());
-		products.put(id, article);
-		csvWriter.write(article.toString());
+	public void addProduct(Product product) {
+		String id = product.getName() + Integer.toString(product.getRestaurantId());
+		products.put(id, product);
+		csvWriter.write(product.toString());
+	}
+	
+	public Collection<Product> getProducts(Integer restaurantId){
+		return products.values().stream()
+				.filter(p -> p.getRestaurantId() == restaurantId)
+				.collect(Collectors.toList());
 	}
 	
 	private HashMap<String, Product> loadProducts(){

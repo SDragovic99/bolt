@@ -2,6 +2,7 @@ package services;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 
 import beans.Product;
 import dao.ProductDAO;
@@ -16,7 +17,7 @@ public class ProductService {
 	
 	public Product addProduct(Product product) throws FileNotFoundException, IOException {
 		String productId = product.getName() + Integer.toString(product.getRestaurantId());
-		String path = "assets/product_images/product-" + productId + ".jpg";
+		String path = "assets/product_images/product-" + productId + ".jpeg";
 		decoder.Base64DecodeAndSave(product.getImagePath(), path);
 		product.setImagePath(path);
 		Product existingProduct = productDAO.findProduct(productId);
@@ -25,5 +26,9 @@ public class ProductService {
 			return product;
 		}
 		return null;
+	}
+	
+	public Collection<Product> getProducts(Integer restaurantId){
+		return productDAO.getProducts(restaurantId);
 	}
 }
