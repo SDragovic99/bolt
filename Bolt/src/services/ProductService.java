@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import beans.Product;
 import dao.ProductDAO;
+import dto.ProductDTO;
 
 public class ProductService {
 	private ProductDAO productDAO;
@@ -27,8 +28,31 @@ public class ProductService {
 		}
 		return null;
 	}
-	
+
 	public Collection<Product> getProducts(Integer restaurantId){
 		return productDAO.getProducts(restaurantId);
 	}
+	
+	public Product findProduct(String productId) {
+		Product product = productDAO.findProduct(productId);
+		return product;
+	}
+	
+	public Product updateProduct(ProductDTO productDTO) throws FileNotFoundException, IOException {
+		String path = productDTO.getImagePath();
+		if(productDTO.getImageChanged()) {
+			String productId = productDTO.getName() + Integer.toString(productDTO.getRestaurantId());
+			path = "assets/product_images/product-" + productId + ".jpeg";
+			decoder.Base64DecodeAndSave(productDTO.getImagePath(), path);
+		}
+		Product updatedProduct = new Product(productDTO.getRestaurantId(), productDTO.getName(), productDTO.getPrice(), productDTO.getType(), 
+				productDTO.getQuantity(), productDTO.getDescription(), path);
+		Product existingProduct = productDAO.findProduct(productDTO.getCurrentProductId());
+		if(existingProduct != null) {
+			productDAO.updateProduct(productDTO.getCurrentProductId(), updatedProduct);
+			return updatedProduct;
+		}
+		return null;
+	}
+	
 }

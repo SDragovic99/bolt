@@ -75,7 +75,7 @@ Vue.component('app-restaurant-overview', {
                                 <button type="button" class="btn btn-outline-dark"><i class="fa fa-trash"></i></button>
                             </div>
                             <div class="btn-group btn-group40" role="group" aria-label="Basic outlined example" v-if="manager.restaurantId == restaurantId">
-                                <button type="button" class="btn btn-outline-dark"><i class="fa fa-pencil"></i></button>
+                                <button type="button" class="btn btn-outline-dark" v-on:click="updateProduct(product)"><i class="fa fa-pencil"></i></button>
                             </div>
                         </div>
                         <img v-bind:src="'/' + product.imagePath" class="col-lg-6 col-md-12">
@@ -101,6 +101,9 @@ Vue.component('app-restaurant-overview', {
     methods: {
         newProduct: function(){
             this.$router.push('/restaurant-overview/' + this.restaurantId + '/new-product');
+        },
+        updateProduct: function(product){
+            this.$router.push('/restaurant-overview/' + product.restaurantId + '/update-product/' + product.name);
         }
     }
 })

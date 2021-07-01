@@ -36,6 +36,16 @@ public class ProductDAO {
 				.collect(Collectors.toList());
 	}
 	
+	public void updateProduct(String currentProductId, Product product) {
+		products.remove(currentProductId);
+		csvWriter.rewrite(product.toString());
+		for(Product currentProduct : products.values()) {
+			csvWriter.write(currentProduct.toString());
+		}
+		String newProductId = product.getName() + Integer.toString(product.getRestaurantId());
+		products.put(newProductId, product);
+	}
+	
 	private HashMap<String, Product> loadProducts(){
 		HashMap<String, Product> products = new HashMap<>();
 		List<String[]> data = csvReader.read();

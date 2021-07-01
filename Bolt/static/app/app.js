@@ -9,6 +9,7 @@ const NewRestaurant = { template: '<app-new-restaurant></app-new-restaurant>'}
 const Restaurant = { template: '<app-restaurant-overview></app-restaurant-overview>'}
 const Restaurants = { template: '<app-restaurants></app-restaurants>'}
 const NewProduct = { template: '<app-new-product></app-new-product>'}
+const UpdateProduct = { template: '<app-update-product></app-update-product>'}
 
 const router = new VueRouter({
 	mode: 'history',
@@ -23,7 +24,8 @@ const router = new VueRouter({
 		{ path: '/new-restaurant', name: 'new-restaurant', component: NewRestaurant},
 		{ path: '/restaurant-overview/:id', name: 'restaurant-overview', component: Restaurant},
 		{ path: '/discover-restaurants', name: 'discover-restaurants', component: Restaurants},
-		{ path: '/restaurant-overview/:id/new-product', name: 'new-product', component: NewProduct}
+		{ path: '/restaurant-overview/:id/new-product', name: 'new-product', component: NewProduct},
+		{ path: '/restaurant-overview/:id/update-product/:name', name: 'update-product', component: UpdateProduct}
 	  ]
 });
 
