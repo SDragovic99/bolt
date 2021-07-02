@@ -29,4 +29,15 @@ public class CSVReader {
 		
 		return dataset;
 	}
+	
+	public List<String> readList(String string) {
+		List<String> dataset = new ArrayList<>();
+		String separator = ";"; 	
+		String[] data = string.split(separator); 
+		
+		for (String s : data) {
+			dataset.add(s);
+		}
+		return dataset;
+	}
 }

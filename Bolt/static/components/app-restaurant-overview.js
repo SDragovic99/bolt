@@ -3,9 +3,11 @@ Vue.component('app-restaurant-overview', {
         return {
             restaurant: {},
             restaurantId: this.$route.params.id, 
+            username: '',
             manager: '',
             role: '',
-            products: []
+            products: [],
+            cart: {}
         };
     },
     mounted: function() {
@@ -18,18 +20,20 @@ Vue.component('app-restaurant-overview', {
                 this.$router.push('/');
         });
         if(window.localStorage.getItem('token')){
-            this.manager = parseJwt(window.localStorage.getItem('token')).sub;
+            this.username = parseJwt(window.localStorage.getItem('token')).sub;
             this.role = parseJwt(window.localStorage.getItem('token')).Role;
             if(this.role == 'manager'){
                 axios
-                    .get('/managers/' + this.manager)
+                    .get('/managers/' + this.username)
                     .then(response => {
                         this.manager = response.data;
                     })
                     .catch(error => {
                         this.$router.push('/');
                 })
-            }        
+            }else if(this.role == 'customer'){
+                this.cart = {id: this.username + this.restaurantId, customerId: this.username, products: [], total: 0.0 };
+            }      
         }
         axios.get('/restaurants/' + this.restaurantId + '/products')
             .then(response => {
@@ -58,7 +62,7 @@ Vue.component('app-restaurant-overview', {
             <div class="col-md-2"><button class="btn btn-outline-info" v-if="manager.restaurantId == restaurantId" v-on:click="newProduct">Dodaj nove artikle</button></div>
 
             <div class="row"> 
-                <div class="col-md-7 offset-md-2 my-2" v-for="product in products" :key="product">
+                <div class="col-md-7 offset-md-2 my-2" v-for="product in products">
                     <div class="row card-body outline-card-gray">
                         <div class="col-sm-1">
                             <button type="button" class="btn plus-btn"><img src="/assets/add.png" v-if="role == 'customer'"></button>

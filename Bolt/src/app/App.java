@@ -5,7 +5,6 @@ import static spark.Spark.staticFiles;
 
 import java.io.File;
 import java.security.Key;
-
 import controllers.CustomerController;
 import controllers.ManagerController;
 import controllers.RestaurantController;
@@ -25,6 +24,7 @@ public class App {
 		new CustomerController(key);
 		new ManagerController(key);
 		new RestaurantController(key);
+				
 	}
 
 }

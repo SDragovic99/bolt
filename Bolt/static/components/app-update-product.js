@@ -3,7 +3,8 @@ Vue.component('app-update-product', {
         return {
             product: {},
             productDTO: {currentProductId: null, imageChanged: false, restaurantId: this.$route.params.id, name: null, price: null, type: null, quantity: null, description: null, imagePath: null},
-            uniqueName: true
+            uniqueName: true,
+            isSubmitted: false
         };
     },
     mounted: function() {
