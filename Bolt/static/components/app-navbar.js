@@ -103,8 +103,17 @@ Vue.component('app-navbar', {
         },
         logout: function(event){
             event.preventDefault();
+            if(this.role == "customer"){
+                let token = window.localStorage.getItem('token');
+                axios.delete('/carts/' + this.username, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    })
+            }
             window.localStorage.removeItem("token");
             this.loggedIn = false;
+            
             this.$router.push('/')
         },
         register_worker: function(event){

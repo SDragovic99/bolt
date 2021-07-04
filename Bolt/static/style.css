@@ -144,4 +144,8 @@ a img{
 .btn-group40{
     width: 40%;
 }
+#checkout-header{
+    background: rgb(222,222,222);
+background: linear-gradient(16deg, rgba(222,222,222,1) 24%, rgba(255,255,255,1) 98%);
+}
 
