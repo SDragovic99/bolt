@@ -10,23 +10,25 @@ import beans.Product;
 import beans.Restaurant;
 import dto.ProductDTO;
 import dto.RestaurantDTO;
-import io.jsonwebtoken.Jwts;
 
 import java.security.Key;
 
+import services.AuthService;
 import services.ManagerService;
 import services.ProductService;
 import services.RestaurantService;
 
 public class RestaurantController {
+	private AuthService authService;
 	private RestaurantService restaurantService;
 	private ManagerService managerService;
 	private ProductService productService;
 	private static Gson gson = new Gson();
 	
 	public RestaurantController(Key key) {
-		this.restaurantService = new RestaurantService();
-		this.managerService = new ManagerService();
+		authService = new AuthService(key);
+		restaurantService = new RestaurantService();
+		managerService = new ManagerService();
 		
 		get("/restaurants", (req, res) -> {
 			res.type("application/json");
@@ -36,27 +38,22 @@ public class RestaurantController {
 		post("/restaurants", (req, res) -> {
 			res.type("application/json");
 			
-			String auth = req.headers("Authorization");
-			if ((auth != null) && (auth.contains("Bearer "))) {
-				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
-				try {
-				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
-				    RestaurantDTO restaurantDTO = gson.fromJson(req.body(), RestaurantDTO.class);
-					Restaurant newRestaurant = restaurantService.registerRestaurant(restaurantDTO);
-					if(newRestaurant == null) {
-						res.status(400);
-						return "Bad request";
-					}
-					managerService = new ManagerService();
-					if(managerService.updateManager(restaurantDTO.getUsername(), newRestaurant.getId()) == null) {
-						res.status(400);
-						return "Bad request";
-					}
-					return "SUCCESS";
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+			if (authService.isAuthorized(req)) {				
+			    RestaurantDTO restaurantDTO = gson.fromJson(req.body(), RestaurantDTO.class);
+				Restaurant newRestaurant = restaurantService.registerRestaurant(restaurantDTO);
+				if(newRestaurant == null) {
+					res.status(400);
+					return "Bad request";
 				}
+				
+				managerService = new ManagerService();
+				if(managerService.updateManager(restaurantDTO.getUsername(), newRestaurant.getId()) == null) {
+					res.status(400);
+					return "Bad request";
+				}
+				return "SUCCESS";				
 			}
+			
 			res.status(403);
 			return "Forbidden";
 		});
@@ -68,30 +65,6 @@ public class RestaurantController {
 			Restaurant restaurant = restaurantService.findRestaurant(id);
 			return gson.toJson(restaurant);
 		});
-		
-		post("/restaurants/:id/products", (req, res) -> {
-			res.type("application/json");
-			
-			String auth = req.headers("Authorization");
-			if ((auth != null) && (auth.contains("Bearer "))) {
-				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
-				try {
-				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
-					Product product = gson.fromJson(req.body(), Product.class);
-					productService = new ProductService();
-					if(productService.addProduct(product) == null) {
-						res.status(400);
-						return "Bad request";
-					}
-					res.status(200);
-					return "SUCCESS";
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
-			}
-			res.status(403);
-			return "Forbidden";
-		});
 
 		get("/restaurants/:id/products", (req, res) -> {
 			res.type("application/json");
@@ -100,26 +73,38 @@ public class RestaurantController {
 			productService = new ProductService();
 			return gson.toJson(productService.getProducts(id));
 		});
+		
+		post("/restaurants/:id/products", (req, res) -> {
+			res.type("application/json");
+			
+			if (authService.isAuthorized(req)) {		
+				Product product = gson.fromJson(req.body(), Product.class);
+				productService = new ProductService();
+				if(productService.addProduct(product) == null) {
+					res.status(400);
+					return "Bad request";
+				}
+				res.status(200);
+				return "SUCCESS";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
 
 		get("/restaurants/:id/products/:name", (req, res) -> {
 			res.type("application/json");
 			
-			String auth = req.headers("Authorization");
-			if ((auth != null) && (auth.contains("Bearer "))) {
-				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
-				try {
-				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
-				    String productId = req.params("name") + req.params("id");
-				    Product product = productService.findProduct(productId);
-					if(product == null) {
-						res.status(400);
-						return "Product not found: " + productId;
-					}
-					return gson.toJson(product);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+			if (authService.isAuthorized(req)) {
+			    String productId = req.params("name") + req.params("id");
+			    Product product = productService.findProduct(productId);
+				if(product == null) {
+					res.status(400);
+					return "Product not found: " + productId;
 				}
+				return gson.toJson(product);
 			}
+			
 			res.status(403);
 			return "Forbidden";
 		});
@@ -127,21 +112,15 @@ public class RestaurantController {
 		put("/restaurants/:id/products/:name", (req, res) -> {
 			res.type("application/json");
 			
-			String auth = req.headers("Authorization");
-			if ((auth != null) && (auth.contains("Bearer "))) {
-				String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
-				try {
-				    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
-					ProductDTO productDTO = gson.fromJson(req.body(), ProductDTO.class);
-					if(productService.updateProduct(productDTO) == null) {
-						res.status(400);
-						return "Bad request";
-					}
-					return "SUCCESS";
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+			if (authService.isAuthorized(req)) {
+				ProductDTO productDTO = gson.fromJson(req.body(), ProductDTO.class);
+				if(productService.updateProduct(productDTO) == null) {
+					res.status(400);
+					return "Bad request";
 				}
+				return "SUCCESS";
 			}
+			
 			res.status(403);
 			return "Forbidden";
 		});
