@@ -9,6 +9,7 @@ import java.security.Key;
 import controllers.CartController;
 import controllers.CustomerController;
 import controllers.ManagerController;
+import controllers.OrderController;
 import controllers.RestaurantController;
 import controllers.UserController;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,6 +28,7 @@ public class App {
 		new ManagerController(key);
 		new RestaurantController(key);
 		new CartController(key);		
+		new OrderController(key);		
 	}
 
 }

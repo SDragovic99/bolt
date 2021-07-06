@@ -29,4 +29,8 @@ public class CartDAO {
 	public void deleteCustomersCarts(String customerId) {
 		carts.values().removeIf(value -> value.getCustomerId().equals(customerId));
 	}
+	
+	public void deleteCart(String id) {
+		carts.remove(id);
+	}
 }

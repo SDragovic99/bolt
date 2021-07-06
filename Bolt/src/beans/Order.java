@@ -1,5 +1,6 @@
 package beans;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +98,12 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return id + "," + date + "," + total + "," + status + "," + customerId + "," + restaurantId + "," + String.join(";", products);
+		return id + "," + getDateString() + "," + total + "," + status + "," + customerId + "," + restaurantId + "," + String.join(";", products);
+	}
+	
+	private String getDateString() {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy.");
+		return formatter.format(date);
 	}
 
 	

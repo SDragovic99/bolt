@@ -25,4 +25,8 @@ public class CartService {
 	public void deleteCustomersCarts(String customerId) {
 		cartDAO.deleteCustomersCarts(customerId);
 	}
+	
+	public void deleteCart(String id) {
+		cartDAO.deleteCart(id);
+	}
 }

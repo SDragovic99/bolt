@@ -83,5 +83,18 @@ public class CartController {
 			res.status(403);
 			return "Forbidden";
 		});
+		
+		delete("/cart/:id", (req, res) -> {
+			res.type("application/json");
+			String id = req.params("id");
+			
+			if (authService.isAuthorized(req)) {				
+			    cartService.deleteCart(id);	
+			    return "Success";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
 	}
 }

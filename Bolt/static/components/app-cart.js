@@ -6,7 +6,8 @@ Vue.component('app-cart',{
             username: '',
             cart: {},
             products: [], 
-            productsInCart: []
+            productsInCart: [],
+            order: {id: null, date: null, total: 0.0, status: null, customerId: null, restaurantId: null, products: []}
         }
     },
     mounted: function(){
@@ -82,7 +83,7 @@ Vue.component('app-cart',{
                             <h5>Ukupno: {{cart.total}}</h5>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
-                            <button type="button" class="btn btn-outline-info btn-lg">Poruči</button>
+                            <button type="button" class="btn btn-outline-info btn-lg" v-on:click="makeOrder">Poruči</button>
                         </div>
                         
                     </div>
@@ -135,6 +136,33 @@ Vue.component('app-cart',{
                 return ""
             }
             return "x" + quantity;    
+        },
+        makeOrder: function(){
+            this.order.customerId = this.username;
+            this.order.restaurantId = this.restaurantId;
+            this.order.products = this.cart.products;
+            this.order.total = this.cart.total;
+            let token = window.localStorage.getItem('token');
+                axios
+                .post("/orders", this.order, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(response => {
+                    axios.delete('/cart/' + this.cart.id, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    })
+                    router.push('/restaurant-overview/' + this.restaurantId)
+                })
+                .catch(error => {
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }       
+                })
         }
     }
 

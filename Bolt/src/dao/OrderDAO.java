@@ -27,8 +27,10 @@ public class OrderDAO {
 		this.orders = loadOrders();
 	}
 	
-	public void addOrder(Order order) {
+	public void addOrder(Order order) throws ParseException {
 		order.setId(generateId());
+		order.setDate(new Date());
+		order.setStatus(OrderStatus.processing);
 		orders.put(order.getId(), order);
 		csvWriter.write(order.toString());
 	}
