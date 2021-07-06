@@ -29,12 +29,22 @@ public class CustomerDAO {
 	}
 		
 	public Customer findCustomer(String id) {
+		this.customers = loadCustomers();
 		return customers.containsKey(id) ? customers.get(id) : null;
 	}
 		
 	public void addCustomer(Customer customer) {
 		customers.put(customer.getUser().getUsername(), customer);
 		csvWriter.write(customer.toString());
+	}
+	
+	public void updateCustomer(Customer customer) {
+		customers.remove(customer.getUser().getUsername());
+		csvWriter.rewrite(customer.toString());
+		for(Customer currentCustomer : customers.values()) {
+			csvWriter.write(currentCustomer.toString());
+		}
+		customers.put(customer.getUser().getUsername(), customer);
 	}
 	
 	private HashMap<String, Customer> loadCustomers() {

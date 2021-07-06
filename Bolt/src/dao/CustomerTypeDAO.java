@@ -31,4 +31,22 @@ public class CustomerTypeDAO {
 		return types;
 	}
 	
+	public CustomerType assignType(int points) {
+		CustomerType bronze = types.get("bronze");
+		CustomerType silver = types.get("silver");
+		CustomerType gold = types.get("gold");
+		CustomerType regular = types.get("regular");
+		if(points >= bronze.getPointsNeeded() && points < silver.getPointsNeeded()) {
+			return bronze;
+		} 
+		else if(points >= silver.getPointsNeeded() && points < gold.getPointsNeeded()) {
+			return silver;
+		}
+		else if(points >= gold.getPointsNeeded()) {
+			return gold;
+		} 
+		else {
+			return regular;
+		}
+	}
 }

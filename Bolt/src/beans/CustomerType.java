@@ -6,8 +6,9 @@ public class CustomerType {
 	private int pointsNeeded;
 	
 	public CustomerType() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.type = Type.regular;
+		this.discount = 0.00;
+		this.pointsNeeded = 0;
 	}
 	
 	public CustomerType(Type type, double discount, int pointsNeeded) {
