@@ -7,6 +7,7 @@ import java.io.File;
 import java.security.Key;
 
 import controllers.CartController;
+import controllers.CommentController;
 import controllers.CustomerController;
 import controllers.ManagerController;
 import controllers.OrderController;
@@ -28,7 +29,8 @@ public class App {
 		new ManagerController(key);
 		new RestaurantController(key);
 		new CartController(key);		
-		new OrderController(key);		
+		new OrderController(key);
+		new CommentController(key);
 	}
 
 }
