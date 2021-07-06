@@ -25,7 +25,11 @@ Vue.component('app-restaurant-overview', {
             this.role = parseJwt(token).Role;
             if(this.role == 'manager'){
                 axios
-                    .get('/managers/' + this.username)
+                    .get('/managers/' + this.username, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    })
                     .then(response => {
                         this.manager = response.data;
                     })

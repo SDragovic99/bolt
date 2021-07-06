@@ -67,7 +67,6 @@ Vue.component('app-navbar', {
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
-                                <li><a class="nav-link" aria-current="page" href="#">Moje porudžbine</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
                             </ul>
@@ -81,7 +80,6 @@ Vue.component('app-navbar', {
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
-                                <li><a class="nav-link" aria-current="page" href="#">Porudžbine</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
                             </ul>
@@ -138,8 +136,13 @@ Vue.component('app-navbar', {
         },
         myRestaurant: function(event){
             event.preventDefault();
-            let username = parseJwt(window.localStorage.getItem('token')).sub;
-            axios.get('/managers/' + username)
+            let token = window.localStorage.getItem('token');
+            let username = parseJwt(token).sub;
+            axios.get('/managers/' + username, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
                 .then(response => {
                     if(response.data.restaurantId != 0){
                         this.$router.push('/restaurant-overview/' + response.data.restaurantId)

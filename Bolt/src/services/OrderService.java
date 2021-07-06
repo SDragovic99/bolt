@@ -1,6 +1,7 @@
 package services;
 
 import java.text.ParseException;
+import java.util.Collection;
 
 import beans.Order;
 import dao.OrderDAO;
@@ -15,5 +16,9 @@ public class OrderService {
 	public Order addOrder(Order order) throws ParseException {
 		orderDAO.addOrder(order);
 		return order;
+	}
+	
+	public Collection<Order> getAll(){
+		return orderDAO.getAll();
 	}
 }

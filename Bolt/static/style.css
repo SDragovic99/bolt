@@ -76,7 +76,7 @@ a img{
 }
 .rating-wrapper{
     width: 100%;
-    border-top: 0.0625rem dashed rgba(32, 33, 37, 0.12);;
+    border-top: 0.0625rem dashed rgba(32, 33, 37, 0.12);
     margin: 0px;
 }
 #rating{
@@ -146,6 +146,39 @@ a img{
 }
 #checkout-header{
     background: rgb(222,222,222);
-background: linear-gradient(16deg, rgba(222,222,222,1) 24%, rgba(255,255,255,1) 98%);
+    background: linear-gradient(16deg, rgba(222,222,222,1) 24%, rgba(255,255,255,1) 98%);
 }
-
+#order-card{
+    border: 0
+}
+#order-card h5{
+    margin-bottom: 0px;
+}   
+#horizontal-nav-wrapper{
+    border-bottom: 0.0625rem solid rgba(32, 33, 37, 0.12);
+    margin-bottom: 3rem;
+}
+#horizontal-nav{
+    list-style-type: none;
+    margin: 2rem 0 0 0;
+    list-style: none;
+    white-space: nowrap;
+    padding: 0 5px;
+    display: inline-block;
+}
+#horizontal-nav li {
+    float: left;
+}
+#horizontal-nav li a {
+    display: block;
+    text-align: center;
+    padding: 16px 16px 16px 0px;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+#horizontal-nav li a:hover {
+    cursor: pointer;
+}
+#order-card .card-body{
+    padding-bottom: 1rem;
+}

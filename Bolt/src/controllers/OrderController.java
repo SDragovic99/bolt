@@ -1,5 +1,6 @@
 package controllers;
 
+import static spark.Spark.get;
 import static spark.Spark.post;
 
 import java.security.Key;
@@ -23,6 +24,17 @@ public class OrderController {
 		authService = new AuthService(key);
 		orderService = new OrderService();
 		customerService = new CustomerService();
+		
+		get("/orders", (req, res) -> {
+			res.type("application/json");
+			
+			if(authService.isAuthorized(req)) {
+				return gson.toJson(orderService.getAll());
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
 	
 		post("/orders", (req, res) -> {
 			res.type("application/json");
@@ -34,6 +46,7 @@ public class OrderController {
 				res.status(200);
 				return "SUCCESS";
 			}
+			
 			res.status(403);
 			return "Forbidden";
 		});

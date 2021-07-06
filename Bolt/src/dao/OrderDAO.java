@@ -3,6 +3,7 @@ package dao;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,15 +17,16 @@ public class OrderDAO {
 	private CSVWriter csvWriter;
 	private String fileName = "data/orders.csv";
 	private HashMap<String, Order> orders;
-	
-	public HashMap<String, Order> getOrders() {
-		return orders;
-	}
+
 
 	public OrderDAO() throws ParseException {
 		this.csvReader = new CSVReader(fileName);
 		this.csvWriter = new CSVWriter(fileName);
 		this.orders = loadOrders();
+	}
+	
+	public Collection<Order> getAll(){
+		return orders.values();
 	}
 	
 	public void addOrder(Order order) throws ParseException {
