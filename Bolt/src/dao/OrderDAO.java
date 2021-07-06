@@ -36,6 +36,17 @@ public class OrderDAO {
 		orders.put(order.getId(), order);
 		csvWriter.write(order.toString());
 	}
+	
+	public void updateOrder(Order order) {
+		orders.remove(order.getId());
+		csvWriter.rewrite(order.toString());
+		
+		for(Order o : orders.values()) {
+			csvWriter.write(o.toString());
+		}
+		
+		orders.put(order.getId(), order);
+	}
 
 	private HashMap<String, Order> loadOrders() throws ParseException {
 		HashMap<String, Order> orders = new HashMap<>();

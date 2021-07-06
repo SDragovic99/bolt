@@ -21,4 +21,8 @@ public class OrderService {
 	public Collection<Order> getAll(){
 		return orderDAO.getAll();
 	}
+	
+	public void updateOrder(Order order) {
+		orderDAO.updateOrder(order);
+	}
 }

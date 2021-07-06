@@ -2,6 +2,7 @@ package controllers;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.put;
 
 import java.security.Key;
 import java.text.ParseException;
@@ -43,8 +44,20 @@ public class OrderController {
 				Order order = gson.fromJson(req.body(), Order.class);
 				orderService.addOrder(order);
 				customerService.addPoints(order);
-				res.status(200);
-				return "SUCCESS";
+				return "Success";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		put("/orders/:id", (req, res) -> {
+			res.type("application/json");
+			
+			if(authService.isAuthorized(req)) {
+				Order order = gson.fromJson(req.body(), Order.class);
+				orderService.updateOrder(order);
+				return "Success";
 			}
 			
 			res.status(403);
