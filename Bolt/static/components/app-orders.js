@@ -7,7 +7,16 @@ Vue.component('app-orders',{
             manager: {},
             deliverer: {},
             username: '',
-            deliveryRequests: []
+            deliveryRequests: [],
+            sortBy: 'default',
+            order: 'asc',
+            selectedStatusFilters: [],
+            selectedTypeFilters: [],
+            searchedName: '',
+            minCost: null,
+            maxCost: null,
+            minDate: null,
+            maxDate: null
         }
     },
     mounted: function(){
@@ -81,11 +90,11 @@ Vue.component('app-orders',{
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <div class="input-group search-bar">
-                        <input type="text" class="form-control" placeholder="Naziv restorana" v-if="role != 'manager'">
-                        <input type="number" class="form-control" placeholder="Cena [od]">
-                        <input type="number" class="form-control" placeholder="Cena [do]">
-                        <input type="date" class="form-control" placeholder="Datum [od]">
-                        <input type="date" class="form-control" placeholder="Datum [do]">
+                        <input type="text" class="form-control" placeholder="Naziv restorana" v-if="role != 'manager'" v-model="searchedName">
+                        <input type="number" class="form-control" placeholder="Cena [od]" v-model="minCost">
+                        <input type="number" class="form-control" placeholder="Cena [do]" v-model="maxCost">
+                        <input type="date" class="form-control" placeholder="Datum [od]" v-model="minDate">
+                        <input type="date" class="form-control" placeholder="Datum [do]" v-model="maxDate">
                     </div>
                 </div> 
                 <p class="mt-2 btn-group" role="group">
@@ -101,46 +110,46 @@ Vue.component('app-orders',{
                             <div class="col">
                                 <h6 class="nunito-heading">Status porudžbine</h6>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="proccessing" value="proccessing">
+                                    <input class="form-check-input" type="checkbox" id="processing" value="processing" v-model="selectedStatusFilters">
                                     <label class="form-check-label" for="proccessing">Obrada</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="inPreparation" value="inPreparation">
+                                    <input class="form-check-input" type="checkbox" id="inPreparation" value="inPreparation" v-model="selectedStatusFilters">
                                     <label class="form-check-label" for="inPreparation">Priprema se</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="waitingForDelivery" value="waitingForDelivery">
+                                    <input class="form-check-input" type="checkbox" id="waitingForDelivery" value="waitingForDelivery" v-model="selectedStatusFilters">
                                     <label class="form-check-label" for="waitingForDelivery">Čeka dostavljača</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="inTransport" value="inTransport">
+                                    <input class="form-check-input" type="checkbox" id="inTransport" value="inTransport" v-model="selectedStatusFilters">
                                     <label class="form-check-label" for="inTransport">U transportu</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="delivered" value="delivered">
+                                    <input class="form-check-input" type="checkbox" id="delivered" value="delivered" v-model="selectedStatusFilters">
                                     <label class="form-check-label" for="delivered">Dostavljena</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="notDelivered" value="notDelivered">
+                                    <input class="form-check-input" type="checkbox" id="notDelivered" value="notDelivered" v-model="selectedStatusFilters">
                                     <label class="form-check-label" for="notDelivered">Nedostavljena</label>
                                 </div>
                             </div>
                             <div class="col" v-if="role != 'manager'">
                                 <h6 class="nunito-heading">Tip restorana</h6>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="italian" value="italian">
+                                    <input class="form-check-input" type="checkbox" id="italian" value="italian" v-model="selectedTypeFilters">
                                     <label class="form-check-label" for="italian">Italijanski</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="chinese" value="chinese">
+                                    <input class="form-check-input" type="checkbox" id="chinese" value="chinese" v-model="selectedTypeFilters">
                                     <label class="form-check-label" for="chinese">Kineski</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="barbeque" value="barbeque">
+                                    <input class="form-check-input" type="checkbox" id="barbeque" value="barbeque" v-model="selectedTypeFilters">
                                     <label class="form-check-label" for="barbeque">Roštilj</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="vegan" value="vegan">
+                                    <input class="form-check-input" type="checkbox" id="vegan" value="vegan" v-model="selectedTypeFilters">
                                     <label class="form-check-label" for="vegan">Veganski</label>
                                 </div>
                             </div>
@@ -149,16 +158,16 @@ Vue.component('app-orders',{
                 </div>
                 <div class="col">
                     <div class="collapse" id="collapse2">
-                        <select class="form-select" id="inputGroupSelect04">
+                        <select class="form-select" id="inputGroupSelect04" v-model="order">
                             <option value="asc">Rastuće</option>
                             <option value="desc">Opadajuće</option>
                         </select>
                         <div class="mt-2 text-muted">
-                            <select class="form-select">
+                            <select class="form-select" v-model="sortBy">
                                 <option value="default">Sortiraj po...</option>
                                 <option value="name" v-if="role != 'manager'">Po nazivu restorana</option>
-                                <option value="location">Po ceni</option>
-                                <option value="rating">Po datumu</option>
+                                <option value="total">Po ceni</option>
+                                <option value="date">Po datumu</option>
                             </select>
                         </div>
                     </div>
@@ -223,6 +232,15 @@ Vue.component('app-orders',{
                 }
             })
             return restaurantName
+        },
+        restaurantType: function(value) {
+            let restaurantType = ''
+            this.restaurants.some(function(restaurant) {
+                if(restaurant.id == value){
+                    restaurantType = restaurant.type
+                }
+            })
+            return restaurantType
         },
         updateStatus: function(order) {
             let status = order.status
@@ -309,6 +327,78 @@ Vue.component('app-orders',{
                         return (item.status == 'waitingForDelivery')
                     }  
                 })
+            }
+
+            if(this.searchedName && this.searchedName != ''){ 
+                temp = temp.filter((item) => {
+                    return this.restaurantName(item.restaurantId).toUpperCase().includes(this.searchedName.toUpperCase())
+                })
+            }
+
+            if(this.minCost){
+                temp = temp.filter((item) => {
+                    return (item.total >= this.minCost)
+                })
+            }
+
+            if(this.maxCost){
+                temp = temp.filter((item) => {
+                    return (item.total <= this.maxCost)
+                })
+            }
+
+            if(this.minDate){
+                temp = temp.filter((item) => {
+                    return (new Date(item.date) >= new Date(this.minDate))
+                })
+            }
+
+            if(this.maxDate){
+                temp = temp.filter((item) => {
+                    return (new Date(item.date) <= new Date(this.maxDate))
+                })
+            }
+
+            if(this.selectedStatusFilters.length > 0){
+                let filteredByAll = []
+                for(var i = 0; i < this.selectedStatusFilters.length; i++){
+                    let filtereByOne = []
+                    filtereByOne = temp.filter(item => {
+                        if(this.selectedStatusFilters[i] == 'notDelivered'){
+                            return (item.status != 'delivered')
+                        }
+                        return (item.status == this.selectedStatusFilters[i])
+                    })
+                    filteredByAll.push(...filtereByOne)
+                }
+                temp = [ ...new Set(filteredByAll)]
+            }
+
+            if(this.selectedTypeFilters.length > 0){
+                let filteredByAll = []
+                for(var i = 0; i < this.selectedTypeFilters.length; i++){
+                    let filteredByOne = []
+                    filteredByOne = temp.filter(item => {
+                        return (this.restaurantType(item.restaurantId) == this.selectedTypeFilters[i])
+                    })
+                    filteredByAll.push(...filteredByOne)
+                }
+                temp = [ ... new Set(filteredByAll)]
+            }
+
+            temp = temp.sort((a, b) => {
+                if(this.sortBy == 'name') {
+                    let fa = this.restaurantName(a.restaurantId).toLowerCase(), fb = this.restaurantName(b.restaurantId).toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                } else if (this.sortBy == 'total') {
+                    return a.total - b.total
+                } else if (this.sortBy == 'date') {
+                    return new Date(a.date) - new Date(b.date)
+                }
+            })
+
+            if(this.order == 'desc'){
+                temp.reverse()
             }
 
             return temp
