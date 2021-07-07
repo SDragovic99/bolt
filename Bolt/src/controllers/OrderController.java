@@ -30,7 +30,26 @@ public class OrderController {
 			res.type("application/json");
 			
 			if(authService.isAuthorized(req)) {
+				orderService = new OrderService();
 				return gson.toJson(orderService.getAll());
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		get("/orders/:id", (req, res) -> {
+			res.type("application/json");
+			String id = req.params("id");
+			
+			if(authService.isAuthorized(req)) {
+				orderService = new OrderService();
+				Order o = orderService.get(id);
+				if(o == null) {
+					res.status(404);
+					return "Not found";
+				}
+				return gson.toJson(o);
 			}
 			
 			res.status(403);

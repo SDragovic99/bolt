@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -28,5 +29,17 @@ public class CSVWriter {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void clearFile() {
+		File file = new File(fileName);
+		if(file.exists() && file.isFile()) {
+			file.delete();
+		}
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -31,6 +31,17 @@ public class DelivererDAO {
 		csvWriter.write(deliverer.toString());
 	}
 	
+	public void updateDeliverer(String id, Deliverer deliverer) {
+		deliverers.remove(id);
+		csvWriter.rewrite(deliverer.toString());
+		
+		for(Deliverer d : deliverers.values()) {
+			csvWriter.write(d.toString());
+		}
+		
+		deliverers.put(id, deliverer);
+	}
+	
 	private HashMap<String, Deliverer> loadDeliverers() {
 		HashMap<String, Deliverer> deliverers = new HashMap<>();
 		

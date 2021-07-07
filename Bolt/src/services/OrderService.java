@@ -22,6 +22,10 @@ public class OrderService {
 		return orderDAO.getAll();
 	}
 	
+	public Order get(String id) {
+		return orderDAO.get(id);
+	}
+	
 	public void updateOrder(Order order) {
 		orderDAO.updateOrder(order);
 	}

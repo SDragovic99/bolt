@@ -46,8 +46,9 @@ Vue.component('app-my-profile', {
             <h1 class="fw-bold nunito-heading mt-4">Moj nalog</h1>
             <div id="horizontal-nav-wrapper">
                 <ul id="horizontal-nav">
-                    <li><a v-on:click.prevent="toInfoBreadcrumb">Lični podaci</a></li>
-                    <li v-if="role != 'admin'" v-on:click.prevent="toOrdersBreadcrumb"><a>Porudžbine</a></li>
+                    <li><a v-on:click.prevent="toInfoBreadcrumb" v-bind:style="{'font-weight' : breadcrumb == 'personal-info' ? 500 : 200}">Lični podaci</a></li>
+                    <li v-if="role != 'admin'" v-on:click.prevent="toOrdersBreadcrumb"><a v-bind:style="{'font-weight' : breadcrumb == 'orders' ? 500 : 200}">Porudžbine</a></li>
+                    <li v-if="role == 'manager'" v-on:click.prevent="toRequestsBreadcrumb"><a v-bind:style="{'font-weight' : breadcrumb == 'requests' ? 500 : 200}">Zahtevi za dostavu</a></li>
                 </ul>
             </div>
         </div>
@@ -115,6 +116,8 @@ Vue.component('app-my-profile', {
             </div>
 
             <app-orders v-if="breadcrumb == 'orders'"></app-orders>
+
+            <app-delivery-requests v-if="breadcrumb == 'requests'"></app-delivery-requests>
         </div>
 
     </div>
@@ -183,6 +186,9 @@ Vue.component('app-my-profile', {
         },
         toOrdersBreadcrumb: function() {
             this.breadcrumb = 'orders'
+        },
+        toRequestsBreadcrumb: function() {
+            this.breadcrumb = 'requests'
         }
     }
 });

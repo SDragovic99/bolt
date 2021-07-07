@@ -9,6 +9,8 @@ import java.security.Key;
 import controllers.CartController;
 import controllers.CommentController;
 import controllers.CustomerController;
+import controllers.DelivererController;
+import controllers.DeliveryRequestController;
 import controllers.ManagerController;
 import controllers.OrderController;
 import controllers.RestaurantController;
@@ -31,6 +33,8 @@ public class App {
 		new CartController(key);		
 		new OrderController(key);
 		new CommentController(key);
+		new DeliveryRequestController(key);
+		new DelivererController(key);
 	}
 
 }

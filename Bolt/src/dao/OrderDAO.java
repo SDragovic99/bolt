@@ -29,6 +29,10 @@ public class OrderDAO {
 		return orders.values();
 	}
 	
+	public Order get(String id) {
+		return orders.containsKey(id) ? orders.get(id) : null;
+	}
+	
 	public void addOrder(Order order) throws ParseException {
 		order.setId(generateId());
 		order.setDate(new Date());
