@@ -27,4 +27,12 @@ public class CustomerService {
 		customer.setCustomerType(customerTypeDAO.assignType(customerPoints));
 		customerDAO.updateCustomer(customer);
 	}
+	
+	public void deductPoints(Order order) {
+		Customer customer = customerDAO.findCustomer(order.getCustomerId());
+		int customerPoints = customer.getPoints() - (int)(order.getTotal()/1000 * 133 * 4);
+		customer.setPoints(customerPoints);
+		customer.setCustomerType(customerTypeDAO.assignType(customerPoints));
+		customerDAO.updateCustomer(customer);
+	}
 }

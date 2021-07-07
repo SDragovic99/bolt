@@ -1,6 +1,7 @@
 package services;
 
 import beans.Comment;
+import beans.CommentStatus;
 import dao.CommentDAO;
 
 public class CommentService {
@@ -12,6 +13,7 @@ public class CommentService {
 	
 	public void addComment(Comment comment) {
 		comment.setId(commentDAO.generateId());
+		comment.setStatus(CommentStatus.waitingForApproval);	
 		commentDAO.addComment(comment);
 	}
 }

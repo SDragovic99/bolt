@@ -199,10 +199,10 @@ Vue.component('app-orders',{
                                 </div>
 
                                 <div class="card-body" v-if="role == 'customer' && order.status == 'processing'">
-                                    <button type="button" class="btn btn-outline-danger align-middle">Otkaži</button>
+                                    <button type="button" class="btn btn-outline-danger align-middle" v-on:click="cancelOrder(order)">Otkaži</button>
                                 </div>
                                 <div class="card-body" v-if="role == 'customer' && order.status == 'delivered'">
-                                    <button type="button" class="btn btn-outline-info align-middle">Ostavi komentar</button>
+                                    <button type="button" class="btn btn-outline-info align-middle" v-on:click="addComment(order)">Ostavi komentar</button>
                                 </div>
                                 <div class="card-body" v-if="role == 'customer' && order.status != 'processing' && order.status != 'delivered'">
                                     <p class="text-muted"> {{order.status | status}} </p>
@@ -265,6 +265,25 @@ Vue.component('app-orders',{
                 .catch(error => {
                     this.$router.push('/');
                 })
+        },
+        cancelOrder: function(order) {
+            order.status = 'cancelled';
+            let token = window.localStorage.getItem('token');
+            axios
+            .put('/orders/' + order.id, order, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .catch(error => {
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }               
+            })
+        },
+        addComment: function(order){
+            this.$router.push('/add-comment/' + order.restaurantId);
         }
     },
     computed: {
@@ -324,6 +343,9 @@ Vue.component('app-orders',{
             }
             if(value == 'delivered'){
                 return "Dostavljena"
+            }
+            if(value == 'cancelled'){
+                return "Otkazana"
             }
             return ''
         }

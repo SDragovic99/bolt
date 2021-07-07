@@ -10,6 +10,7 @@ import java.text.ParseException;
 import com.google.gson.Gson;
 
 import beans.Order;
+import beans.OrderStatus;
 import services.AuthService;
 import services.CustomerService;
 import services.OrderService;
@@ -76,6 +77,9 @@ public class OrderController {
 			if(authService.isAuthorized(req)) {
 				Order order = gson.fromJson(req.body(), Order.class);
 				orderService.updateOrder(order);
+				if(order.getStatus() == OrderStatus.cancelled) {
+					customerService.deductPoints(order);
+				}
 				return "Success";
 			}
 			
