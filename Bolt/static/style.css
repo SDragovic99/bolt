@@ -226,3 +226,9 @@ label.star:before {
     content: '\f006';
     font-family: FontAwesome
 }
+#collapse12 p, h5{
+    margin-bottom: 0;
+}
+/* .comment-outline{
+    border-bottom: 0.0625rem solid rgba(32, 33, 37, 0.12);
+} */

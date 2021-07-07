@@ -7,7 +7,8 @@ Vue.component('app-restaurant-overview', {
             manager: '',
             role: '',
             products: [],
-            cart: {id: null, customerId: null, products: [], total: null }
+            cart: {id: null, customerId: null, products: [], total: null },
+            comments: []
         };
     },
     mounted: function() {
@@ -53,7 +54,18 @@ Vue.component('app-restaurant-overview', {
                                 }
                             });
                 });
-            }      
+            }
+            
+            axios.get("/comments/" + this.restaurantId, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+                }).then(response => {
+                    this.comments = response.data
+                })
+                .catch(error => {
+                    this.$router.push('/');
+                })
         }
         axios.get('/restaurants/' + this.restaurantId + '/products')
             .then(response => {
@@ -79,8 +91,43 @@ Vue.component('app-restaurant-overview', {
             </div>   	
         </div>
 
-        <div class="container shadow-lg p-3 mb-5 bg-body rounded col-md-11">
-            <p id="rating2" class="card-text"><img src="/assets/smiling-xl.png"> <span class="align-middle">{{restaurant.rating}}</span></p>
+        <div class="container shadow-lg p-3 mb-5 bg-body rounded col-md-11 justify-content-between">
+            <div class="row">
+                <div class="col-md-6">
+                    <p id="rating2" class="card-text"><img src="/assets/smiling-xl.png"> <span class="align-middle">{{restaurant.rating}}</span></p>
+                </div>
+                <div class="col-md-6 text-end align-self-center" v-if="role != '' && role !='deliverer'">  
+                    <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12" aria-expanded="false" aria-controls="collapse12">Komentari</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="collapse" id="collapse12">
+                    <div class="row" v-for="comment in filteredComments">
+                        <div class="col-md-3 align-self-center">
+                            <div class="card-body">
+                                <h5>{{ comment.customerId }}</h5>
+                            </div>
+                        </div>
+                        <div v-bind:class="{ 'col-md-7' : (role != 'manager' || manager.restaurantId != restaurantId), 'col-md-5' : manager.restaurantId == restaurantId, 'align-self-center' : true }">
+                            <div class="card-body">
+                                <p class="fw-light">{{ comment.description }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2 align-self-center">
+                            <div class="card-body text-end">
+                                <h5 class="fw-normal"><img src="/assets/smiling.png"> {{ comment.review }}</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-2 align-self-center" v-if="manager.restaurantId == restaurantId">
+                            <div class="card-body text-end">
+                                <button type="button" class="btn btn-outline-success" :disabled="comment.status == 'approved'" v-on:click="approve(comment)"><i class="fa fa-check"></i></button>
+                                <button type="button" class="btn btn-outline-danger" :disabled="comment.status == 'disapproved'" v-on:click="disapprove(comment)"><i class="fa fa-ban"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                 
         </div>
 
         <div class="container">
@@ -171,13 +218,49 @@ Vue.component('app-restaurant-overview', {
                         headers: {
                             'Authorization': 'Bearer ' + token
                         }
-                    }).catch(error => {
-                    this.$router.push('/');
-                });
+                    })
+                    .catch(error => {
+                        this.$router.push('/');
+                    });
             }
         }, 
         checkout: function(){
-            this.$router.push('/restaurant-overview/' + this.restaurantId +'/checkout');
+            this.$router.push('/restaurant-overview/' + this.restaurantId + '/checkout');
+        },
+        approve: function(comment){
+            let token = window.localStorage.getItem('token');
+            comment.status = 'approved'
+            axios.put("/comments/" + comment.id, comment, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .catch(error => {
+                    this.$router.push('/');
+                });
+        },
+        disapprove: function(comment){
+            let token = window.localStorage.getItem('token');
+            comment.status = 'disapproved'
+            axios.put("/comments/" + comment.id, comment, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .catch(error => {
+                    this.$router.push('/');
+                });
+        }
+    }, 
+    computed: {
+        filteredComments(){
+            let comments = this.comments
+            if(this.role == 'customer' || this.manager.restaurantId != this.restaurantId){
+                comments = comments.filter(comment => {
+                    return (comment.status == 'approved')
+                })
+            }
+            return comments
         }
     }
 })

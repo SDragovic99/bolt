@@ -1,6 +1,8 @@
 package controllers;
 
 import static spark.Spark.post;
+import static spark.Spark.get;
+import static spark.Spark.put;
 
 import java.security.Key;
 
@@ -29,6 +31,35 @@ public class CommentController {
 				res.status(200);
 				return "SUCCESS";
 			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		get("/comments/:restaurantId", (req, res) -> {
+			res.type("application/json");
+			Integer restaurantId = Integer.parseInt(req.params("restaurantId"));
+			
+			if(authService.isAuthorized(req)) {
+				commentService = new CommentService();
+				return gson.toJson(commentService.getAll(restaurantId));
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		put("/comments/:id", (req, res) -> {
+			res.type("application/json");
+			Integer id = Integer.parseInt(req.params("id"));
+			
+			if(authService.isAuthorized(req)) {
+				commentService = new CommentService();
+				Comment comment = gson.fromJson(req.body(), Comment.class);
+				commentService.updateComment(id, comment);
+				return "Success";
+			}
+			
 			res.status(403);
 			return "Forbidden";
 		});

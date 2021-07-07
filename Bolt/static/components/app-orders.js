@@ -194,7 +194,7 @@ Vue.component('app-orders',{
                                 <div class="card-body" v-if="role == 'deliverer' && order.status != 'delivered'">
                                     <button type="button" class="btn btn-outline-secondary align-middle" v-on:click="updateStatus(order)" :disabled="deliveryRequests.some(e => e.orderId === order.id)"> {{order.status | nextStatus}}</button>
                                 </div>
-                                <div class="card-body" v-if="role != 'customer' && order.status == 'delivered'">
+                                <div class="card-body" v-if="role != 'customer' && (order.status == 'delivered' || order.status == 'cancelled')">
                                     <p class="text-muted"> {{order.status | status}} </p>
                                 </div>
 

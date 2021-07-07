@@ -3,6 +3,7 @@ package dao;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import beans.Comment;
 import beans.CommentStatus;
@@ -27,9 +28,24 @@ public class CommentDAO {
 		return comments.values();
 	}
 	
+	public Collection<Comment> getAll(Integer restaurantId){
+		return comments.values().stream()
+				.filter(comment -> comment.getRestaurantId() == restaurantId)
+				.collect(Collectors.toList());
+	}
+	
 	public void addComment(Comment comment) {
 		comments.put(comment.getId(), comment);
 		csvWriter.write(comment.toString());
+	}
+	
+	public void updateComment(Integer id, Comment comment) {
+		comments.replace(id, comment);
+		csvWriter.clearFile();
+		
+		for (Comment c : comments.values()) {
+			csvWriter.write(c.toString());
+		}
 	}
 
 	private HashMap<Integer, Comment> loadComments() {

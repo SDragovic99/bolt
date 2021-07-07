@@ -88,7 +88,11 @@ Vue.component('app-delivery-requests', {
                             'Authorization': 'Bearer ' + token
                         }
                     })
-                    .then(response => this.deliveryRequests = [])
+                    .then(response => {
+                        this.deliveryRequests = this.deliveryRequests.filter(item => {
+                            return (req.orderId != item.orderId)
+                        })
+                    })
                     .catch(error => {
                         if(error.response.status == 403){
                             window.localStorage.removeItem("token");
@@ -131,7 +135,11 @@ Vue.component('app-delivery-requests', {
                             'Authorization': 'Bearer ' + token
                         }
                     })
-                    .then(response => this.deliveryRequests = [])
+                    .then(response => {
+                        this.deliveryRequests = this.deliveryRequests.filter(item => {
+                            return (req.orderId != item.orderId)
+                        })
+                    })
                     .catch(error => {
                         if(error.response.status == 403){
                             window.localStorage.removeItem("token");
