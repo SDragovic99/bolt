@@ -1,5 +1,6 @@
 package controllers;
 
+import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
@@ -113,7 +114,7 @@ public class UserController {
 			User user = userService.findUser(cred.getUsername());
 			
 			if(user != null) {
-				if(user.getPassword().equals(cred.getPassword())) {
+				if(user.getPassword().equals(cred.getPassword()) && !user.getIsDeleted() && !user.getIsBlocked()) {
 					String jws = authService.buildToken(user);
 					
 					res.status(200);
@@ -124,6 +125,19 @@ public class UserController {
 			res.status(400);
 			return "Bad request";
 		});	
+		
+		delete("/users/:username", (req, res) -> {
+			res.type("application/json");
+			String username = req.params("username");
+			
+			if(authService.isAuthorized(req)) {
+				userService.deleteUser(username);
+				return "Success";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
 		
 	}
 	

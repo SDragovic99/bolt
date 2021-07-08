@@ -1,4 +1,3 @@
-mel,123,Melanija,Racić,female,16.05.1999.,customer,false,false
 mikkica,123shif,Mrkela,Mirkovic,male,10.06.2021.,customer,false,false
 adminko,123,Adminko,Adminic,male,10.06.2021.,admin,false,false
 mika,123,Mika,Mikic,male,10.06.2021.,manager,false,false
@@ -10,5 +9,6 @@ djoka,123,Djoko,Djokic,male,10.06.2021.,manager,false,false
 pera,123,Pera,Peric,male,10.06.2021.,manager,false,false
 koca,123,Koca,Kocic,male,10.06.2021.,customer,false,false
 mrki,123,Mrki,Mrkimrki,male,10.06.2021.,deliverer,false,false
+mel,123,Melanija,Racić,female,16.05.1999.,customer,false,false
 nijesrx,123,NijeSrki,Idaljenijesrki,male,10.06.2021.,manager,false,false
 reka,123,Reka,Drina,male,10.06.2021.,manager,false,false

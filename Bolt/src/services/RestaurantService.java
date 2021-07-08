@@ -35,4 +35,11 @@ public class RestaurantService {
 		return restaurantDAO.getAll();
 	}
 
+	public void updateRestaurant(Integer id, Restaurant restaurant) {
+		restaurantDAO.updateRestaurant(id, restaurant);
+	}
+	
+	public void deleteRestaurant(Integer id) {
+		restaurantDAO.deleteRestaurant(id);
+	}
 }

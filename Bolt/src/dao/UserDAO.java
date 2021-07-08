@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import beans.Role;
 import beans.User;
@@ -24,11 +25,19 @@ public class UserDAO {
 	}
 	
 	public User findUser(String id) {
-		return users.containsKey(id) ? users.get(id) : null;
+		User user = users.containsKey(id) ? users.get(id) : null;
+		if(user != null) {
+			if(!user.getIsDeleted()) {
+				return user;
+			}
+		}
+		return null;
 	}
 	
 	public Collection<User> getAll() {
-		return users.values();
+		return users.values().stream()
+				.filter(user -> !user.getIsDeleted())
+				.collect(Collectors.toList());
 	}
 	
 	public void addUser(User user) {
@@ -37,13 +46,24 @@ public class UserDAO {
 	}
 	
 
-	public void updateUser(User user) {
+	public void updateUser(User user) throws ParseException {
+		users = loadUsers();
 		users.remove(user.getUsername());
 		csvWriter.rewrite(user.toString());
 		for(User current_user : users.values()) {
 			csvWriter.write(current_user.toString());
 		}
 		users.put(user.getUsername(), user);
+	}
+	
+	public void deleteUser(String id) throws ParseException {
+		users = loadUsers();
+		users.get(id).setIsDeleted(true);
+		csvWriter.clearFile();
+		
+		for (User u : users.values()) {
+			csvWriter.write(u.toString());
+		}
 	}
 	
 

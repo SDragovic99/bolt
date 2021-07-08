@@ -41,7 +41,7 @@ public class UserService {
 		return userDAO.findUser(username);
 	}
 	
-	public User updateUser(User user) {
+	public User updateUser(User user) throws ParseException {
 		User existingUser = userDAO.findUser(user.getUsername());
 		if (existingUser != null) {
 			userDAO.updateUser(user);
@@ -52,6 +52,10 @@ public class UserService {
 
 	public Collection<User> getAll(){
 		return userDAO.getAll();
+	}
+	
+	public void deleteUser(String username) throws ParseException {
+		userDAO.deleteUser(username);
 	}
 	
 }

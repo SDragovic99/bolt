@@ -8,6 +8,7 @@ public class Restaurant {
 	private String imagePath;
 	private Location location;
 	private double rating;
+	private Boolean isDeleted;
 	
 	public Restaurant() {
 		super();
@@ -22,8 +23,21 @@ public class Restaurant {
 		this.imagePath = imagePath;
 		this.location = location;
 		this.rating = rating;
+		this.isDeleted = false;
 	}
 
+	public Restaurant(int id, String name, RestaurantType type, Boolean isOpen, String imagePath, Location location,
+			double rating, Boolean isDeleted) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.type = type;
+		this.isOpen = isOpen;
+		this.imagePath = imagePath;
+		this.location = location;
+		this.rating = rating;
+		this.isDeleted = isDeleted;
+	}
 	public int getId() {
 		return id;
 	}
@@ -67,9 +81,16 @@ public class Restaurant {
 		this.rating = rating;
 	}
 	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 	@Override
 	public String toString() {
-		return id + "," + name + "," + type + "," + isOpen + "," + imagePath + "," + location.toString() + "," + rating;
+		return id + "," + name + "," + type + "," + isOpen + "," + imagePath + "," + location.toString() + "," + rating + "," + isDeleted;
 	}
 	
 }

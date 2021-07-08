@@ -55,4 +55,8 @@ public class ProductService {
 		return null;
 	}
 	
+	public void deleteProduct(String id) {
+		productDAO.deleteProduct(id);
+	}
+	
 }

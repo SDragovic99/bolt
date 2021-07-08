@@ -21,7 +21,13 @@ public class ProductDAO {
 	}
 	
 	public Product findProduct(String id) {
-		return products.containsKey(id) ? products.get(id) : null;
+		Product product = products.containsKey(id) ? products.get(id) : null;
+		if(product != null) {
+			if(!product.getIsDeleted()) {
+				return product;
+			}
+		}
+		return null;
 	}
 	
 	public void addProduct(Product product) {
@@ -32,7 +38,7 @@ public class ProductDAO {
 	
 	public Collection<Product> getProducts(Integer restaurantId){
 		return products.values().stream()
-				.filter(p -> p.getRestaurantId() == restaurantId)
+				.filter(p -> p.getRestaurantId() == restaurantId && !p.getIsDeleted())
 				.collect(Collectors.toList());
 	}
 	
@@ -46,12 +52,22 @@ public class ProductDAO {
 		products.put(newProductId, product);
 	}
 	
+	public void deleteProduct(String id) {
+		products = loadProducts();
+		products.get(id).setIsDeleted(true);
+		csvWriter.clearFile();
+		
+		for (Product p : products.values()) {
+			csvWriter.write(p.toString());
+		}
+	}
+	
 	private HashMap<String, Product> loadProducts(){
 		HashMap<String, Product> products = new HashMap<>();
 		List<String[]> data = csvReader.read();
 		for(String[] strings : data) {
 			Product product = new Product(Integer.parseInt(strings[0]), strings[1], Double.parseDouble(strings[2]), 
-					ProductType.valueOf(strings[3]), Integer.parseInt(strings[4]), strings[5], strings[6]);
+					ProductType.valueOf(strings[3]), Integer.parseInt(strings[4]), strings[5], strings[6], Boolean.parseBoolean(strings[7]));
 			products.put(strings[1] + strings[0], product);
 		}
 		return products;

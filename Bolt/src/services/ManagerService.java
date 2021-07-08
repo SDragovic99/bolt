@@ -22,15 +22,20 @@ public class ManagerService {
 	public Collection<User> getManagers(){
 		ArrayList<User> managers = new ArrayList<User>();
 		for(User user : userDAO.getAll()){
-			if(user.getRole() == Role.manager && managerDAO.checkIfManagerAvailable(user.getUsername())) {
+			if(!user.getIsDeleted() && user.getRole() == Role.manager && managerDAO.checkIfManagerAvailable(user.getUsername())) {
 				managers.add(user);
 			}
 		}
 		return managers;
 	}
 	
-	public Manager getManager(String username) {
-		return managerDAO.findManager(username);
+	public Manager getManager(String username) throws ParseException {
+		UserDAO userDAO = new UserDAO();
+		Manager manager = managerDAO.findManager(username);
+		if(userDAO.findUser(manager.getUsername()) == null){
+			return null;
+		}
+		return manager;
 	}
 	
 	public Manager updateManager(String username, int restaurantId) {

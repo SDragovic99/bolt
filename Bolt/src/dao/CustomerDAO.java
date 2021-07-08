@@ -31,7 +31,13 @@ public class CustomerDAO {
 		
 	public Customer findCustomer(String id) {
 		this.customers = loadCustomers();
-		return customers.containsKey(id) ? customers.get(id) : null;
+		Customer customer = customers.containsKey(id) ? customers.get(id) : null;
+		if(customer != null) {
+			if(!customer.getUser().getIsDeleted()) {
+				return customer;
+			}
+		}
+		return null;
 	}
 		
 	public void addCustomer(Customer customer) {

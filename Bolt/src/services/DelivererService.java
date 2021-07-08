@@ -1,7 +1,10 @@
 package services;
 
+import java.text.ParseException;
+
 import beans.Deliverer;
 import dao.DelivererDAO;
+import dao.UserDAO;
 
 public class DelivererService {
 	private DelivererDAO delivererDAO;
@@ -10,8 +13,13 @@ public class DelivererService {
 		delivererDAO = new DelivererDAO();
 	}
 	
-	public Deliverer get(String id) {
-		return delivererDAO.findDeliverer(id);
+	public Deliverer get(String id) throws ParseException {
+		UserDAO userDAO = new UserDAO();
+		Deliverer deliverer =  delivererDAO.findDeliverer(id);
+		if(userDAO.findUser(deliverer.getUsername()) == null) {
+			return null;
+		}
+		return deliverer;
 	}
 	
 	public void addDeliverer(Deliverer deliverer) {

@@ -1,5 +1,6 @@
 package controllers;
 
+import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
@@ -120,6 +121,47 @@ public class RestaurantController {
 					return "Bad request";
 				}
 				return "SUCCESS";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		put("/restaurants/:id", (req, res) -> {
+			res.type("application/json");
+			Integer id = Integer.parseInt(req.params("id"));
+			
+			if (authService.isAuthorized(req)) {
+				Restaurant restaurant = gson.fromJson(req.body(), Restaurant.class);
+				restaurantService.updateRestaurant(id, restaurant);
+				return "Success";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		delete("/restaurants/:id", (req, res) -> {
+			res.type("application/json");
+			Integer id = Integer.parseInt(req.params("id"));
+			
+			if(authService.isAuthorized(req)) {
+				restaurantService.deleteRestaurant(id);
+				return "Success";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		delete("/restaurants/:id/products/:name", (req, res) -> {
+			res.type("application/json");
+			String id = req.params("id");
+			String name = req.params("name");
+			
+			if(authService.isAuthorized(req)) {
+				productService.deleteProduct(name+id);
+				return "Success";
 			}
 			
 			res.status(403);

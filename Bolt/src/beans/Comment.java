@@ -7,6 +7,7 @@ public class Comment {
 	private String description;
 	private int review;
 	private CommentStatus status;
+	private Boolean isDeleted;
 	
 	public Comment() {
 		super();
@@ -21,8 +22,21 @@ public class Comment {
 		this.description = description;
 		this.review = review;
 		this.status = status;
+		this.isDeleted = false;
 	}
 	
+	public Comment(int id, String customerId, int restaurantId, String description, int review, CommentStatus status,
+			Boolean isDeleted) {
+		super();
+		this.id = id;
+		this.customerId = customerId;
+		this.restaurantId = restaurantId;
+		this.description = description;
+		this.review = review;
+		this.status = status;
+		this.isDeleted = isDeleted;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -71,9 +85,17 @@ public class Comment {
 		this.status = status;
 	}
 
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	@Override
 	public String toString() {
-		return id + "," + customerId + "," + restaurantId + "," + description + "," + review + "," + status;
+		return id + "," + customerId + "," + restaurantId + "," + description + "," + review + "," + status + "," + isDeleted;
 	}
 	
 	

@@ -55,9 +55,9 @@ Vue.component('app-profiles', {
                                         <p class="card-text"><small class="text-info">{{ customerType(user) }}</small></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2 text-end">
-                                    <button type="button" class="btn btn-outline-dark"><i class="fa fa-trash"></i></button>
-                                    <button type="button" class="btn btn-outline-danger"><i class="fa fa-ban"></i></button>
+                                <div class="col-md-2 text-end" v-if="user.role != 'admin'">
+                                    <button type="button" class="btn btn-outline-dark" v-on:click="deleteUser(user)"><i class="fa fa-trash"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" v-on:click="blockUser(user)"><i class="fa fa-ban"></i></button>
                                 </div>
                             </div>                           
                         </div>                       
@@ -133,6 +133,26 @@ Vue.component('app-profiles', {
             }
 
             return customerType
+        },
+        deleteUser: function(user){
+            let token = window.localStorage.getItem('token');
+            axios.delete("/users/" + user.username, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => { this.users = this.users.filter(item => item.username != user.username)})
+            .catch(error => {
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }else{
+                    this.$router.push('/');
+                }               
+            })
+        },
+        blockUser: function(user){
+            //TODO: block user
         }
     },
     filters: {

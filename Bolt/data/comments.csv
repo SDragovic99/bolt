@@ -1,4 +1,4 @@
-1,mikkica,1,Lots of trees!,4,approved
-2,mikkica,4,Ono...,1,waitingForApproval
-3,koca,1,Sve je okej cene su super.,5,approved
-4,koca,1,Katastrofa,1,disapproved
+1,mikkica,1,Lots of trees!,4,approved,false
+2,mikkica,4,Ono...,1,waitingForApproval,false
+3,koca,1,Sve je okej cene su super.,5,approved,false
+4,koca,1,Katastrofa,1,disapproved,false

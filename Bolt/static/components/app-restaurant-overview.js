@@ -98,6 +98,9 @@ Vue.component('app-restaurant-overview', {
                 <div class="container col-md-1" v-if="role == 'customer' && restaurant.isOpen">
                     <button type="button" class="btn btn-primary btn-lg text-nowrap px-3" v-on:click="checkout" v-bind:disabled="cart.products.length == 0"><i class="fa fa-shopping-bag"></i> <span class="align-middle">{{cart.products.length}}</span></button>
                 </div>	
+                <div class="container col-md-1" v-if="role == 'admin'">
+                    <button type="button" class="btn btn-dark btn-lg text-nowrap px-3" v-on:click="deleteRestaurant"><i class="fa fa-trash"></i></button>
+                </div>	
             </div>   	
         </div>
 
@@ -119,7 +122,7 @@ Vue.component('app-restaurant-overview', {
                                 <h5>{{ comment.customerId }}</h5>
                             </div>
                         </div>
-                        <div v-bind:class="{ 'col-md-7' : (role != 'manager' || manager.restaurantId != restaurantId), 'col-md-5' : manager.restaurantId == restaurantId, 'align-self-center' : true }">
+                        <div v-bind:class="{ 'col-md-7' : (role != 'admin' && role != 'admin' && manager.restaurantId != restaurantId), 'col-md-5' : (manager.restaurantId == restaurantId || role == 'admin'), 'align-self-center' : true }">
                             <div class="card-body">
                                 <p class="fw-light">{{ comment.description }}</p>
                             </div>
@@ -133,6 +136,11 @@ Vue.component('app-restaurant-overview', {
                             <div class="card-body text-end">
                                 <button type="button" class="btn btn-outline-success" :disabled="comment.status == 'approved'" v-on:click="approve(comment)"><i class="fa fa-check"></i></button>
                                 <button type="button" class="btn btn-outline-danger" :disabled="comment.status == 'disapproved'" v-on:click="disapprove(comment)"><i class="fa fa-ban"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 align-self-center" v-if="role == 'admin'">
+                            <div class="card-body text-end">
+                                <button type="button" class="btn btn-outline-dark" v-on:click="deleteComment(comment)"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -158,7 +166,7 @@ Vue.component('app-restaurant-overview', {
                                 <button type="button" class="btn btn-outline-secondary" v-on:click="addToCart(product)">+</button>
                             </div>
                             <div class="btn-group btn-group40" role="group" aria-label="Basic outlined example" v-if="role == 'admin'">
-                                <button type="button" class="btn btn-outline-dark"><i class="fa fa-trash"></i></button>
+                                <button type="button" class="btn btn-outline-dark" v-on:click="deleteProduct(product)"><i class="fa fa-trash"></i></button>
                             </div>
                             <div class="btn-group btn-group40" role="group" aria-label="Basic outlined example" v-if="manager.restaurantId == restaurantId">
                                 <button type="button" class="btn btn-outline-dark" v-on:click="updateProduct(product)"><i class="fa fa-pencil"></i></button>
@@ -276,6 +284,51 @@ Vue.component('app-restaurant-overview', {
                         this.$router.push('/');
                     }   
                 })
+        },
+        deleteRestaurant: function(){
+            let token = window.localStorage.getItem('token');
+            axios.delete("/restaurants/" + this.restaurantId, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => { this.$router.push('/discover-restaurants'); })
+            .catch(error => {
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }              
+            })
+        },
+        deleteProduct: function(product){
+            let token = window.localStorage.getItem('token');
+            axios.delete("/restaurants/" + this.restaurantId + "/products/" + product.name, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => { this.products = this.products.filter(item => item.name != product.name) })
+            .catch(error => {
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }              
+            })
+        },
+        deleteComment: function(comment){
+            let token = window.localStorage.getItem('token');
+            axios.delete("/comments/" + comment.id, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => { this.comments = this.comments.filter(item => item.id != comment.id) })
+            .catch(error => {
+                if(error.response.status == 403){
+                    window.localStorage.removeItem("token");
+                    this.$router.push('/forbidden');
+                }              
+            })
         }
     }, 
     computed: {

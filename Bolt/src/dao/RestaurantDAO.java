@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -21,7 +22,13 @@ public class RestaurantDAO {
 	}
 	
 	public Restaurant findRestaurant(Integer id) {
-		return restaurants.containsKey(id) ? restaurants.get(id) : null;
+		Restaurant r = restaurants.containsKey(id) ? restaurants.get(id) : null;
+		if(r != null) {
+			if(!r.getIsDeleted()) {
+				return r;
+			}
+		}
+		return null;
 	}
 	
 	public Integer generateId() {
@@ -29,7 +36,9 @@ public class RestaurantDAO {
 	}
 	
 	public Collection<Restaurant> getAll(){
-		return restaurants.values();
+		return restaurants.values().stream()
+				.filter(r -> !r.getIsDeleted())
+				.collect(Collectors.toList());
 	}
 	
 	public void addRestaurant(Restaurant restaurant) {
@@ -37,12 +46,31 @@ public class RestaurantDAO {
 		csvWriter.write(restaurant.toString());
 	}
 	
+	public void updateRestaurant(Integer id, Restaurant restaurant) {
+		restaurants = loadRestaurants();
+		restaurants.replace(id, restaurant);
+		csvWriter.clearFile();
+		for (Restaurant r : restaurants.values()) {
+			csvWriter.write(r.toString());
+		}
+	}
+	
+	public void deleteRestaurant(Integer id) {
+		restaurants = loadRestaurants();
+		restaurants.get(id).setIsDeleted(true);
+		csvWriter.clearFile();
+		
+		for (Restaurant r : restaurants.values()) {
+			csvWriter.write(r.toString());
+		}
+	}
+	
 	private HashMap<Integer, Restaurant> loadRestaurants(){
 		HashMap<Integer, Restaurant> restaurants = new HashMap<>();
 		List<String[]> data = csvReader.read();
 		for(String[] strings : data) {
 			Restaurant restaurant = new Restaurant(Integer.parseInt(strings[0]), strings[1], RestaurantType.valueOf(strings[2]), Boolean.parseBoolean(strings[3]), strings[4], 
-					new Location(Double.parseDouble(strings[5]), Double.parseDouble(strings[6]), strings[7], strings[8], strings[9]), Double.parseDouble(strings[10]));
+					new Location(Double.parseDouble(strings[5]), Double.parseDouble(strings[6]), strings[7], strings[8], strings[9]), Double.parseDouble(strings[10]), Boolean.parseBoolean(strings[11]));
 			restaurants.put(Integer.parseInt(strings[0]), restaurant);
 		}
 		

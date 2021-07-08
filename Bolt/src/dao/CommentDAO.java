@@ -25,12 +25,14 @@ public class CommentDAO {
 	}
 	
 	public Collection<Comment> getAll(){
-		return comments.values();
+		return comments.values().stream()
+				.filter(comment -> !comment.getIsDeleted())
+				.collect(Collectors.toList());
 	}
 	
 	public Collection<Comment> getAll(Integer restaurantId){
 		return comments.values().stream()
-				.filter(comment -> comment.getRestaurantId() == restaurantId)
+				.filter(comment -> comment.getRestaurantId() == restaurantId && !comment.getIsDeleted())
 				.collect(Collectors.toList());
 	}
 	
@@ -47,6 +49,16 @@ public class CommentDAO {
 			csvWriter.write(c.toString());
 		}
 	}
+	
+	public void deleteComment(Integer id) {
+		comments = loadComments();
+		comments.get(id).setIsDeleted(true);
+		csvWriter.clearFile();
+		
+		for (Comment c : comments.values()) {
+			csvWriter.write(c.toString());
+		}
+	}
 
 	private HashMap<Integer, Comment> loadComments() {
 		HashMap<Integer, Comment> comments = new HashMap<>();
@@ -54,7 +66,7 @@ public class CommentDAO {
 		List<String[]> data = csvReader.read();
 		for (String[] strings : data) {
 			Comment comment = new Comment(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[2]), strings[3], 
-					Integer.parseInt(strings[4]), CommentStatus.valueOf(strings[5]));
+					Integer.parseInt(strings[4]), CommentStatus.valueOf(strings[5]), Boolean.parseBoolean(strings[6]));
 			comments.put(Integer.parseInt(strings[0]), comment);
 		}
 		

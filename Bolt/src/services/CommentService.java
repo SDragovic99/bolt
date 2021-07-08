@@ -26,4 +26,8 @@ public class CommentService {
 	public void updateComment(Integer id, Comment comment) {
 		commentDAO.updateComment(id, comment);
 	}
+	
+	public void deleteComment(Integer id) {
+		commentDAO.deleteComment(id);
+	}
 }

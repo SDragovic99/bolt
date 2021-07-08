@@ -3,6 +3,7 @@ package controllers;
 import static spark.Spark.post;
 import static spark.Spark.get;
 import static spark.Spark.put;
+import static spark.Spark.delete;
 
 import java.security.Key;
 
@@ -57,6 +58,19 @@ public class CommentController {
 				commentService = new CommentService();
 				Comment comment = gson.fromJson(req.body(), Comment.class);
 				commentService.updateComment(id, comment);
+				return "Success";
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		delete("/comments/:id", (req, res) -> {
+			res.type("application/json");
+			Integer id = Integer.parseInt(req.params("id"));
+			
+			if(authService.isAuthorized(req)) {
+				commentService.deleteComment(id);
 				return "Success";
 			}
 			

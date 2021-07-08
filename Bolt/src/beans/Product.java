@@ -8,6 +8,7 @@ public class Product {
 	private int quantity;
 	private String description;
 	private String imagePath;
+	private Boolean isDeleted;
 	
 	public Product() {
 		super();
@@ -23,6 +24,20 @@ public class Product {
 		this.quantity = quantity;
 		this.description = description;
 		this.imagePath = imagePath;
+		this.isDeleted = false;
+	}
+
+	public Product(int restaurantId, String name, double price, ProductType type, int quantity, String description,
+			String imagePath, Boolean isDeleted) {
+		super();
+		this.restaurantId = restaurantId;
+		this.name = name;
+		this.price = price;
+		this.type = type;
+		this.quantity = quantity;
+		this.description = description;
+		this.imagePath = imagePath;
+		this.isDeleted = isDeleted;
 	}
 
 	public int getRestaurantId() {
@@ -81,9 +96,17 @@ public class Product {
 		this.imagePath = imagePath;
 	}
 
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	@Override
 	public String toString() {
-		return restaurantId + "," + name + "," + price + "," + type + "," + quantity + "," + description + "," + imagePath;
+		return restaurantId + "," + name + "," + price + "," + type + "," + quantity + "," + description + "," + imagePath + "," + isDeleted;
 	}
 
 }
