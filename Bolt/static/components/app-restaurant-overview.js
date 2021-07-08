@@ -106,7 +106,7 @@ Vue.component('app-restaurant-overview', {
                 <div class="col-md-6">
                     <p id="rating2" class="card-text"><img src="/assets/smiling-xl.png"> <span class="align-middle">{{restaurant.rating}}</span></p>
                 </div>
-                <div class="col-md-6 text-end align-self-center" v-if="role != '' && role !='deliverer'">  
+                <div class="col-md-6 text-end align-self-center" v-if="role == 'admin' || role == 'customer' || manager.restaurantId == restaurantId">  
                     <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12" aria-expanded="false" aria-controls="collapse12">Komentari</button>
                 </div>
             </div>
@@ -281,7 +281,7 @@ Vue.component('app-restaurant-overview', {
     computed: {
         filteredComments(){
             let comments = this.comments
-            if(this.role == 'customer' || this.manager.restaurantId != this.restaurantId){
+            if(this.role == 'customer'){
                 comments = comments.filter(comment => {
                     return (comment.status == 'approved')
                 })

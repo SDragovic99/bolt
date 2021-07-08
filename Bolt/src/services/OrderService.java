@@ -2,6 +2,7 @@ package services;
 
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.List;
 
 import beans.Order;
 import dao.OrderDAO;
@@ -28,5 +29,9 @@ public class OrderService {
 	
 	public void updateOrder(Order order) {
 		orderDAO.updateOrder(order);
+	}
+	
+	public List<String> getCustomers(Integer restaurantId){
+		return orderDAO.getCustomers(restaurantId);
 	}
 }

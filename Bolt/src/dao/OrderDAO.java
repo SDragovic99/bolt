@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import beans.Order;
 import beans.OrderStatus;
@@ -50,6 +51,13 @@ public class OrderDAO {
 		}
 		
 		orders.put(order.getId(), order);
+	}
+	
+	public List<String> getCustomers(Integer restaurantId){
+		return orders.values().stream()
+				.filter(order -> order.getRestaurantId() == restaurantId)
+				.map(order -> order.getCustomerId())
+				.collect(Collectors.toList());
 	}
 
 	private HashMap<String, Order> loadOrders() throws ParseException {

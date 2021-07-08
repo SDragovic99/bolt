@@ -54,6 +54,7 @@ Vue.component('app-navbar', {
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="my_profile">Moj profil</a></li>
                                 <li><a class="nav-link" href="#" v-on:click="myRestaurant">Moj restoran</a></li>
+                                <li><a class="nav-link" href="#" v-on:click="myCustomers">Moji kupci</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="nav-link" aria-current="page" href="#" v-on:click="logout">Odjavi se</a></li>
                             </ul>
@@ -151,7 +152,10 @@ Vue.component('app-navbar', {
                 .catch(error => {
                     this.$router.push('/')
                 })
-            
+        },
+        myCustomers: function(event){
+            event.preventDefault();
+            this.$router.push('/my-customers');
         }
     }
 });

@@ -51,7 +51,7 @@ Vue.component('app-cart',{
     template: `
         <div>
             <app-navbar></app-navbar>
-            <div class="container-fluid py-5" id="checkout-header">
+            <div class="container-fluid py-5 gradient-header">
                 <div class="container">
                     <h1 class="nunito-heading mt-4">Završetak kupovine</h1>
                     <h5 class="nunito-heading">{{ restaurant.name }}</h5>
