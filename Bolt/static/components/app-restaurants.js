@@ -7,6 +7,7 @@ Vue.component('app-restaurants', {
             selectedType: 'default',
             searchedRating: '',
             selectedFilters: [],
+            openFilter: '',
             order: 'asc',
             sortBy: 'default'
         }
@@ -72,7 +73,7 @@ Vue.component('app-restaurants', {
                                     <label class="form-check-label" for="vegan">Veganski</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="open" value="open" v-model="selectedFilters">
+                                    <input class="form-check-input" type="checkbox" id="open" value="open" v-model="openFilter">
                                     <label class="form-check-label" for="open">Otvoreni</label>
                                 </div>
                             </div>
@@ -171,14 +172,17 @@ Vue.component('app-restaurants', {
                 for(var i = 0; i < this.selectedFilters.length; i++){
                     let filteredByOne = []
                     filteredByOne = temp.filter((item) => {
-                        if(this.selectedFilters[i] == 'open'){
-                            return (item.isOpen === true)
-                        }
                         return (item.type == this.selectedFilters[i])
                     })
                     filteredByAll.push(...filteredByOne)
                 }
                 temp = [ ...new Set(filteredByAll)]
+            }
+
+            if(this.openFilter && this.openFilter != ''){
+                temp = temp.filter((item) => {
+                    return (item.isOpen === true)
+                })
             }
 
             temp = temp.sort((a, b) => {

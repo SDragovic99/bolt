@@ -35,8 +35,13 @@ Vue.component('app-restaurant-overview', {
                         this.manager = response.data;
                     })
                     .catch(error => {
-                        this.$router.push('/');
-                })
+                        if(error.response.status == 403){
+                            window.localStorage.removeItem("token");
+                            this.$router.push('/forbidden');
+                        }else{
+                            this.$router.push('/');
+                        }   
+                    })
             }else if(this.role == 'customer'){               
                 axios.get('/carts/' + this.username + this.restaurantId, {
                         headers: {
@@ -64,7 +69,12 @@ Vue.component('app-restaurant-overview', {
                     this.comments = response.data
                 })
                 .catch(error => {
-                    this.$router.push('/');
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }else{
+                        this.$router.push('/');
+                    }   
                 })
         }
         axios.get('/restaurants/' + this.restaurantId + '/products')
@@ -203,9 +213,15 @@ Vue.component('app-restaurant-overview', {
                     headers: {
                         'Authorization': 'Bearer ' + token
                     }
-                }).catch(error => {
-                    this.$router.push('/');
-            });
+                })
+                .catch(error => {
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }else{
+                        this.$router.push('/');
+                    }   
+                })
         },
         removeFromCart: function(product){
             var index = this.cart.products.indexOf(product.name)
@@ -220,8 +236,13 @@ Vue.component('app-restaurant-overview', {
                         }
                     })
                     .catch(error => {
-                        this.$router.push('/');
-                    });
+                        if(error.response.status == 403){
+                            window.localStorage.removeItem("token");
+                            this.$router.push('/forbidden');
+                        }else{
+                            this.$router.push('/');
+                        }   
+                    })
             }
         }, 
         checkout: function(){
@@ -248,8 +269,13 @@ Vue.component('app-restaurant-overview', {
                     }
                 })
                 .catch(error => {
-                    this.$router.push('/');
-                });
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }else{
+                        this.$router.push('/');
+                    }   
+                })
         }
     }, 
     computed: {
