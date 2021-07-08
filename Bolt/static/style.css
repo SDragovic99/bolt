@@ -229,6 +229,10 @@ label.star:before {
 #collapse12 p, h5{
     margin-bottom: 0;
 }
-/* .comment-outline{
-    border-bottom: 0.0625rem solid rgba(32, 33, 37, 0.12);
-} */
+#user-filters p{
+    margin-bottom: 0.5rem;
+    margin-top: 0.8rem;
+}
+#user-search select{
+    margin-top: 0.5rem;
+}

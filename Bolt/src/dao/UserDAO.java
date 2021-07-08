@@ -1,6 +1,10 @@
 package dao;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,7 +17,7 @@ public class UserDAO {
 	private String fileName = "data/users.csv";
 	private HashMap<String, User> users;
 	
-	public UserDAO() {
+	public UserDAO() throws ParseException {
 		this.csvReader = new CSVReader(fileName);
 		this.csvWriter = new CSVWriter(fileName);
 		this.users = loadUsers();
@@ -43,11 +47,14 @@ public class UserDAO {
 	}
 	
 
-	private HashMap<String, User> loadUsers() {
+	private HashMap<String, User> loadUsers() throws ParseException {
 		HashMap<String, User> users = new HashMap<>();
+		DateFormat format = new SimpleDateFormat("dd.MM.yyyy.");
+		
 		List<String[]> data = csvReader.read();
 		for (String[] strings : data) {
-			User user = new User(strings[0], strings[1], strings[2], strings[3], strings[4], strings[5], Role.valueOf(strings[6]));
+			Date date = format.parse(strings[5]);
+			User user = new User(strings[0], strings[1], strings[2], strings[3], strings[4], date, Role.valueOf(strings[6]), Boolean.parseBoolean(strings[7]), Boolean.parseBoolean(strings[8]));
 			users.put(strings[0], user);
 		}
 		

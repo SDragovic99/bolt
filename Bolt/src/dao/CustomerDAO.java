@@ -1,5 +1,6 @@
 package dao;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ public class CustomerDAO {
 	private String fileName = "data/customers.csv";
 	private HashMap<String, Customer> customers;
 		
-	public CustomerDAO() {
+	public CustomerDAO() throws ParseException {
 		this.csvReader = new CSVReader(fileName);
 		this.csvWriter = new CSVWriter(fileName);
 		this.userDAO = new UserDAO();

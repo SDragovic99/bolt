@@ -2,7 +2,6 @@ Vue.component('app-profiles', {
     data: function(){
 		return {
             users: [],
-            customers: [],
             searchedName: '',
             searchedUsername: '',
             searchedSurname: '',
@@ -19,20 +18,6 @@ Vue.component('app-profiles', {
                 'Authorization': 'Bearer ' + token
             }})
             .then(response => this.users = response.data)
-            .catch(error => {
-                if(error.response.status == 403){
-                    window.localStorage.removeItem("token");
-                    this.$router.push('/forbidden');
-                }else{
-                    this.$router.push('/');
-                }               
-            })
-        
-        axios.get('/customers', {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }})
-            .then(response => this.customers = response.data)
             .catch(error => {
                 if(error.response.status == 403){
                     window.localStorage.removeItem("token");
@@ -77,9 +62,10 @@ Vue.component('app-profiles', {
                             </div>                           
                         </div>                       
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" id="user-filters">
                         <h5 class="text-left nunito-heading">Filteri</h5>
                         <div class="text-muted">
+                        <p>Uloga</p>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="admin" value="admin" v-model="selectedRoleFilters">
                             <label class="form-check-label" for="admin">Administratori</label>
@@ -96,6 +82,8 @@ Vue.component('app-profiles', {
                             <input class="form-check-input" type="checkbox" id="customer" value="customer" v-model="selectedRoleFilters">
                             <label class="form-check-label" for="customer">Kupci</label>
                         </div>
+                        <hr>
+                        <p>Tip kupca</p>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="gold" value="gold" v-model="selectedTypeFilters">
                             <label class="form-check-label" for="gold">Zlatni kupci</label>
@@ -108,10 +96,14 @@ Vue.component('app-profiles', {
                             <input class="form-check-input" type="checkbox" id="bronze" value="bronze" v-model="selectedTypeFilters">
                             <label class="form-check-label" for="bronze">Bronzani kupci</label>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="regular" value="regular" v-model="selectedTypeFilters">
+                            <label class="form-check-label" for="regular">Regularni kupci</label>
+                        </div>
                         </div>
                         <hr>
                         <h5 class="text-left nunito-heading">Sortiraj</h5>
-                        <div>
+                        <div id="user-search">
                             <select class="form-select" id="inputGroupSelect04" v-model="order">
                                 <option selected value="asc">Rastuće</option>
                                 <option value="desc">Opadajuće</option>
@@ -133,15 +125,13 @@ Vue.component('app-profiles', {
     methods: {
         customerType: function(user){
             let customerType = ''
-            this.customers.some(function(customer){
-                if(customer.user.username == user.username){
-                    if(customer.customerType){
-                        customerType = "Tip kupca: " + customer.customerType.type + ", " + customer.points + " bodova"
-                    }else {
-                        customerType = "Tip kupca: regular, " +  customer.points + " bodova"
-                    }
+
+            if(user.role == 'customer'){
+                if(user.customerType){
+                    customerType = "Tip kupca: " + user.customerType.type + ", " + user.points + " bodova"
                 }
-            })
+            }
+
             return customerType
         }
     },
@@ -160,39 +150,6 @@ Vue.component('app-profiles', {
     computed: {
         filteredUsers(){
             let temp = this.users
-
-            if(this.sortBy == 'points'){
-                let customers = this.customers
-                let users = []
-                customers = customers.sort((a, b) =>{
-                    return a.points - b.points
-                })
-                customers.forEach(customer => {
-                    temp.forEach(user => {
-                        if(user.username == customer.user.username){
-                            users.push(user)
-                        }
-                    })
-                })
-                temp = users
-            }
-
-            temp = temp.sort((a, b) => {
-                if(this.sortBy == 'name'){
-                    let fa = a.name.toLowerCase(), fb = b.name.toLowerCase()
-                    return alphabeticalSorter(fa, fb)
-                } else if(this.sortBy == 'surname'){
-                    let fa = a.surname.toLowerCase(), fb = b.surname.toLowerCase()
-                    return alphabeticalSorter(fa, fb)
-                } else if(this.sortBy == 'username'){
-                    let fa = a.username.toLowerCase(), fb = b.username.toLowerCase()
-                    return alphabeticalSorter(fa, fb)
-                }
-            })
-
-            if(this.order == 'desc'){
-                temp.reverse()
-            }
 
             if(this.searchedName && this.searchedName != ''){
                 temp = temp.filter((item) => {
@@ -228,25 +185,39 @@ Vue.component('app-profiles', {
                 let filteredByAllTypes = []
                 for(var i = 0; i < this.selectedTypeFilters.length; i++){
                     let filteredByType = []
-                    filteredByType = this.customers.filter((item) => {
+                    filteredByType = temp.filter((item) => {
                         if(item.customerType){
                             return (item.customerType.type == this.selectedTypeFilters[i])
                         }
                     })
                     filteredByAllTypes.push(...filteredByType)
                 }
-                let users = []
-                filteredByAllTypes.forEach(customer => {
-                    this.users.forEach(user => {
-                        if(user.username == customer.user.username){
-                            users.push(user)
-                        }
-                    })
+                temp = filteredByAllTypes
+            }    
+            
+            if(this.sortBy == 'points'){
+                temp = temp.sort((a, b) =>{
+                    return a.points - b.points
                 })
-                temp = users
+
             }
 
-            
+            temp = temp.sort((a, b) => {
+                if(this.sortBy == 'name'){
+                    let fa = a.name.toLowerCase(), fb = b.name.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                } else if(this.sortBy == 'surname'){
+                    let fa = a.surname.toLowerCase(), fb = b.surname.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                } else if(this.sortBy == 'username'){
+                    let fa = a.username.toLowerCase(), fb = b.username.toLowerCase()
+                    return alphabeticalSorter(fa, fb)
+                }
+            })
+
+            if(this.order == 'desc'){
+                temp.reverse()
+            }
 
             return temp
         }

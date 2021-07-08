@@ -126,6 +126,7 @@ Vue.component('app-my-profile', {
         update: function() {
             this.isSubmittedUpdate = true;
             if(this.user.name && this.user.surname && this.user.dateOfBirth && this.user.gender){
+                this.user.dateOfBirth = new Date(this.user.dateOfBirth)
                 let token = window.localStorage.getItem('token');
                 axios
                 .put('/users/' + this.username, this.user, {

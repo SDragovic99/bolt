@@ -12,6 +12,7 @@ import dto.ProductDTO;
 import dto.RestaurantDTO;
 
 import java.security.Key;
+import java.text.ParseException;
 
 import services.AuthService;
 import services.ManagerService;
@@ -25,7 +26,7 @@ public class RestaurantController {
 	private ProductService productService;
 	private static Gson gson = new Gson();
 	
-	public RestaurantController(Key key) {
+	public RestaurantController(Key key) throws ParseException {
 		authService = new AuthService(key);
 		restaurantService = new RestaurantService();
 		managerService = new ManagerService();

@@ -2,6 +2,7 @@ package controllers;
 
 import static spark.Spark.get;
 import java.security.Key;
+import java.text.ParseException;
 
 import com.google.gson.Gson;
 
@@ -13,7 +14,7 @@ public class CustomerController {
 	private CustomerService customerService;
 	private static Gson gson = new Gson();
 	
-	public CustomerController(Key key) {
+	public CustomerController(Key key) throws ParseException {
 		authService = new AuthService(key);
 		customerService = new CustomerService();
 		

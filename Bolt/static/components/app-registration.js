@@ -1,7 +1,7 @@
 Vue.component('app-registration', {
     data: function(){
 		return {
-            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: "customer"},
+            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: "customer", isBlocked: false, isDeleted: false},
             isSubmitted: false,
             uniqueUsername: true
         };
@@ -65,6 +65,7 @@ Vue.component('app-registration', {
         register: function(){
             this.isSubmitted = true;
             if(this.user.name && this.user.surname && this.user.dateOfBirth && this.user.gender && this.user.username && this.user.password){
+                this.user.dateOfBirth = new Date(this.user.dateOfBirth)
                 axios.post("/users", this.user).then(response => (router.push('/login'))).catch(error =>  this.uniqueUsername = false);
             }
             

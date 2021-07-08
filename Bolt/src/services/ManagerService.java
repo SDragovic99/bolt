@@ -1,5 +1,6 @@
 package services;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,7 +14,7 @@ public class ManagerService {
 	private UserDAO userDAO;
 	private ManagerDAO managerDAO;
 	
-	public ManagerService() {
+	public ManagerService() throws ParseException {
 		this.userDAO = new UserDAO();
 		this.managerDAO = new ManagerDAO();
 	}

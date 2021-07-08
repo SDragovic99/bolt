@@ -1,5 +1,6 @@
 package services;
 
+import java.text.ParseException;
 import java.util.Collection;
 
 import beans.Customer;
@@ -16,7 +17,7 @@ public class UserService {
 	private ManagerDAO managerDAO;
 	private CustomerDAO customerDAO;
 	
-	public UserService() {
+	public UserService() throws ParseException {
 		this.userDAO = new UserDAO();
 		this.managerDAO = new ManagerDAO();
 		this.customerDAO = new CustomerDAO();
@@ -37,8 +38,7 @@ public class UserService {
 	}
 	
 	public User findUser(String username) {
-		User user = userDAO.findUser(username);
-		return user;
+		return userDAO.findUser(username);
 	}
 	
 	public User updateUser(User user) {
