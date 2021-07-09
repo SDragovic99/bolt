@@ -24,6 +24,10 @@ public class CancellationLogService {
 		cancellationLogDAO = new CancellationLogDAO();
 	}
 	
+	public void addLog(CancellationLog log) {
+		cancellationLogDAO.addLog(log);
+	}
+	
 	public List<User> getSpammers(){
 		List<User> users = new ArrayList<>();
 		HashMap<String, List<CancellationLog>> logs = cancellationLogDAO.getCustomersLogs();

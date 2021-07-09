@@ -5,13 +5,16 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 
 import java.security.Key;
+import java.util.Date;
 import java.text.ParseException;
 
 import com.google.gson.Gson;
 
+import beans.CancellationLog;
 import beans.Order;
 import beans.OrderStatus;
 import services.AuthService;
+import services.CancellationLogService;
 import services.CustomerService;
 import services.OrderService;
 
@@ -78,6 +81,8 @@ public class OrderController {
 				Order order = gson.fromJson(req.body(), Order.class);
 				orderService.updateOrder(order);
 				if(order.getStatus() == OrderStatus.cancelled) {
+					CancellationLogService logService = new CancellationLogService();
+					logService.addLog(new CancellationLog(order.getCustomerId(), new Date(), order.getId()));
 					customerService.deductPoints(order);
 				}
 				return "Success";

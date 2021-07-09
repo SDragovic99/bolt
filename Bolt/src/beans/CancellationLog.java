@@ -13,6 +13,13 @@ public class CancellationLog {
 		super();
 	}
 	
+	public CancellationLog(String customerId, Date date, String orderId) {
+		super();
+		this.customerId = customerId;
+		this.date = date;
+		this.orderId = orderId;
+	}
+
 	public CancellationLog(Integer id, String customerId, Date date, String orderId) {
 		super();
 		this.id = id;

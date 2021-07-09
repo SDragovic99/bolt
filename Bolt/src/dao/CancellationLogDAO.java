@@ -46,7 +46,8 @@ public class CancellationLogDAO {
 	}
 	
 	public void addLog(CancellationLog log) {
-		logs.put(logs.size() + 1, log);
+		log.setId(logs.size() + 1);
+		logs.put(log.getId(), log);
 		csvWriter.write(log.toString());
 	}
 
