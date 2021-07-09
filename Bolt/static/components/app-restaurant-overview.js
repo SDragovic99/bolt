@@ -16,12 +16,28 @@ Vue.component('app-restaurant-overview', {
             .get('/restaurants/' + this.restaurantId)
             .then(response => {
                 this.restaurant = response.data;
+                const vectorSource = new ol.source.Vector({
+                    features: [new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([
+                            this.restaurant.location.longitude, this.restaurant.location.latitude
+                        ]))})]
+                  });
+                  const vectorLayer = new ol.layer.Vector({
+                    source: vectorSource,
+                    style: new ol.style.Style({
+                      image: new ol.style.Circle({
+                        radius: 9,
+                        fill: new ol.style.Fill({color: 'red'})
+                      })
+                    })
+                  });
                 const map = new ol.Map({
                     target: 'map',
                     layers: [
                       new ol.layer.Tile({
                         source: new ol.source.OSM()
-                      })
+                      }),
+                      vectorLayer
                     ],
                     view: new ol.View({
                       center: ol.proj.fromLonLat([this.restaurant.location.longitude, this.restaurant.location.latitude]),
