@@ -1,7 +1,7 @@
 Vue.component('app-new-restaurant', {
     data: function(){
         return {
-            restaurantDTO: {name: null, type: null, imagePath: null, Location: null, username: null},
+            restaurantDTO: {name: null, type: null, imagePath: null, location: null, username: null},
             user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: 'manager'},
             isSubmitted: false,
             isRegistrationSubmitted: false,
@@ -9,7 +9,9 @@ Vue.component('app-new-restaurant', {
             managers: [],
             breadcrumb: 'info',
             uniqueUsername: true,
-            registered: false
+            registered: false,
+            location: {longitude: null, latitude: null, address: null, city: null, postalCode: null},
+            places: null
         }
     },
     mounted: function(){
@@ -27,6 +29,27 @@ Vue.component('app-new-restaurant', {
                     this.$router.push('/');
                 }               
             })
+        this.places = places({
+            appId: 'plQ4P1ZY8JUZ',
+            apiKey: 'bc14d56a6d158cbec4cdf98c18aced26',
+            container: document.querySelector('#address'),
+		    templates: {
+			      value: function(suggestion) {
+			        return suggestion.name;
+			      }
+			    }
+			  }).configure({
+			    type: 'address'
+			 });
+
+            this.places.on('change', function getLocationData(e) {
+                
+                document.querySelector('#address').value = e.suggestion.value || '';
+                document.querySelector('#city').value = e.suggestion.city || '';
+                document.querySelector('#longitude').value = e.suggestion.latlng.lng || '';
+                document.querySelector('#latitude').value = e.suggestion.latlng.lat || '';
+                document.querySelector('#postalCode').value = e.suggestion.postcode || '';    
+            });
     },
     template: `
         <div>
@@ -45,10 +68,6 @@ Vue.component('app-new-restaurant', {
                                 <div v-bind:class="{'col' : true, 'text-center' : true, 'text-info' : breadcrumb == 'manager', 'text-muted' : breadcrumb != 'manager'}">
                                     <a class="nav-link" aria-current="page" href="#" v-on:click.prevent="toManagerBreadcrumb">Menadžer</a>
                                 </div>
-                                <span class="col text-muted text-center">/</span>
-                                <div v-bind:class="{'col' : true, 'text-center' : true, 'text-info' : breadcrumb == 'location', 'text-muted' : breadcrumb != 'location'}">
-                                    <a class="nav-link" aria-current="page" href="#" v-on:click.prevent="toLocationBreadcrumb">Lokacija</a>
-                                </div>
                             </div>
                         </div>
                         <form class="row g-3" v-if="breadcrumb == 'info'">
@@ -66,12 +85,29 @@ Vue.component('app-new-restaurant', {
                                     <option value="vegan">Veganski</option>
                                 </select>
                                 <div class="invalid-feedback">Odaberite tip restorana</div>
-                            </div>                            
+                            </div>
                             <div class="col-md-12">
                                 <label for="photo" class="form-label">Logo restorana</label>
                                 <input type="file" @change="imageAdded" v-bind:class="{'form-control':true, 'is-invalid': !restaurantDTO.imagePath && isSubmitted}" id="photo" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
                                 <div class="invalid-feedback">Upload-ujte sliku</div>
                             </div>
+                            <div class="col-md-12">
+                                <label for="address" class="form-label">Adresa restorana</label>
+                                <input type="search" class="form-control" id="address" placeholder="Adresa restorana" v-model="location.address" v-bind:class="{'form-control':true, 'is-invalid' : !location.address && isRegistrationSubmitted}">
+                                <div class="invalid-feedback">Popunite polje</div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="city" class="form-label">Grad</label>
+                                <input type="text" class="form-control" id="city" placeholder="Grad" v-model="location.city" v-bind:class="{'form-control':true, 'is-invalid' : !location.city && isRegistrationSubmitted}" disabled>
+                                <div class="invalid-feedback">Popunite polje</div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="postalCode" class="form-label">Poštanski broj</label>
+                                <input type="text" class="form-control" id="postalCode" placeholder="Poštanski broj" v-model="location.postalCode" v-bind:class="{'form-control':true, 'is-invalid' : !location.postalCode && isRegistrationSubmitted}" disabled>
+                                <div class="invalid-feedback">Popunite polje</div>
+                            </div>
+                            <input id="latitude" v-model="location.latitude" hidden>
+                            <input id="longitude" v-model="location.longitude" hidden>                            
                             <div class="d-grid gap-2">
                                 <button class="btn btn-primary" type="button" v-on:click="toManagerBreadcrumb">Dalje...</button>
                             </div>
@@ -131,15 +167,6 @@ Vue.component('app-new-restaurant', {
                                 </form>
                             </div>
                             <div class="d-grid gap-2">
-                                <button class="btn btn-primary" type="button" v-on:click="toLocationBreadcrumb">Dalje...</button>
-                            </div>
-                        </form>
-
-                        <form class="row g-3" v-if="breadcrumb == 'location'">
-                            <div class="col-md-12">
-                                mapa...
-                            </div>
-                            <div class="d-grid gap-2">
                                 <button class="btn btn-primary" type="button" v-on:click="createRestaurant">Kreiraj restoran</button>
                             </div>
                         </form>
@@ -153,6 +180,7 @@ Vue.component('app-new-restaurant', {
         createRestaurant: function(){
             this.isSubmitted = true;
             this.restaurantDTO.username = this.username
+            this.restaurantDTO.location = this.location
             if(this.restaurantDTO.name && this.restaurantDTO.type && this.restaurantDTO.username && this.restaurantDTO.imagePath){ 
                 let token = window.localStorage.getItem('token');
                 axios.post('/restaurants', this.restaurantDTO, { 
@@ -207,10 +235,12 @@ Vue.component('app-new-restaurant', {
             this.breadcrumb = 'info'
         },
         toManagerBreadcrumb: function(){
+            this.location.address = document.querySelector('#address').value;
+            this.location.city = document.querySelector('#city').value;
+            this.location.postalCode = document.querySelector('#postalCode').value;
+            this.location.latitude = document.querySelector('#latitude').value;
+            this.location.longitude = document.querySelector('#longitude').value;
             this.breadcrumb = 'manager'
-        },
-        toLocationBreadcrumb: function(){
-            this.breadcrumb = 'location'
         }
     }
 });

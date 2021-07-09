@@ -1,6 +1,6 @@
-1,Aloha Poke,chinese,true,assets/restaurant_images/restaurant-1.jpg,0.0,0.0,ADDRESS,Novi Sad,POSTALCODE,9.0,false
-2,Italiano,italian,true,assets/restaurant_images/restaurant-2.jpg,0.0,0.0,ADDRESS,Novi Sad,POSTALCODE,8.2,false
-3,Greda,barbeque,false,assets/restaurant_images/restaurant-3.jpg,0.0,0.0,ADDRESS,Kraljevo,POSTALCODE,9.4,false
-4,Pizzato,italian,true,assets/restaurant_images/restaurant-4.jpg,0.0,0.0,ADDRESS,Beograd,POSTALCODE,9.1,false
-5,Udon,chinese,false,assets/restaurant_images/restaurant-5.jpg,0.0,0.0,ADDRESS,Novi Sad,POSTALCODE,9.0,false
-6,Vegan,vegan,false,assets/restaurant_images/restaurant-6.jpg,0.0,0.0,ADDRESS,Beograd,POSTALCODE,8.4,false
+1,Aloha Poke,chinese,true,assets/restaurant_images/restaurant-1.jpg,19.8343,45.2515,Lilike Bem 2,Novi Sad,21101,9.0,false
+2,Italiano,italian,true,assets/restaurant_images/restaurant-2.jpg,19.8134,45.2575,Cankareva 14,Novi Sad,21137,8.2,false
+3,Greda,barbeque,false,assets/restaurant_images/restaurant-3.jpg,19.8448,45.2196,Cara Lazara 5,Sremska Kamenica,21208,9.4,false
+4,Pizzato,italian,true,assets/restaurant_images/restaurant-4.jpg,20.393,45.3808,Pupinova 5,Zrenjanin,23000,9.1,false
+5,Udon,chinese,false,assets/restaurant_images/restaurant-5.jpg,19.8388,45.2549,Pavla Papa 11,Novi Sad,21101,9.0,false
+6,Vegan,vegan,false,assets/restaurant_images/restaurant-6.jpg,19.834,45.2213,Fruskogorski put 74,Sremska Kamenica,21208,8.4,false

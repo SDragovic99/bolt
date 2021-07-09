@@ -8,7 +8,7 @@ Vue.component('app-restaurant-overview', {
             role: '',
             products: [],
             cart: {id: null, customerId: null, products: [], total: null },
-            comments: []
+            comments: [],
         };
     },
     mounted: function() {
@@ -16,6 +16,18 @@ Vue.component('app-restaurant-overview', {
             .get('/restaurants/' + this.restaurantId)
             .then(response => {
                 this.restaurant = response.data;
+                const map = new ol.Map({
+                    target: 'map',
+                    layers: [
+                      new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                      })
+                    ],
+                    view: new ol.View({
+                      center: ol.proj.fromLonLat([this.restaurant.location.longitude, this.restaurant.location.latitude]),
+                      zoom: 18
+                    })
+                });
             })
             .catch(error => {
                 this.$router.push('/');
@@ -89,16 +101,23 @@ Vue.component('app-restaurant-overview', {
     <div>
         <app-navbar></app-navbar>
         <div v-bind:style="{ 'background-image': 'url(/' + restaurant.imagePath + ')', 'background-size': 'cover', 'opacity': 0.6, 'background-position': 'center', 'color': 'white' }" class="container-fluid py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-light btn-md" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"><i class="fa fa-map-marker" aria-hidden="true"></i> Pogledaj lokaciju na mapi</button>
+                    </div>
+                </div>
+            </div>
             <div class="container d-flex justify-content-between">
-                <div class="container mt-5 col-md-11 justify-content-bottom" style="opacity: 1;">
+                <div class="container mt-4 col-md-11 justify-content-bottom" style="opacity: 1;">
                     <h1 class="fw-bold nunito-heading">{{ restaurant.name }}</h1>
                     <p>{{restaurant.type | enumToString}}</p>
                     <button id="delivery" class="btn btn-light btn-sm" disabled>{{restaurant.isOpen ? 'OTVOREN' : 'ZATVOREN'}}</button>
                 </div>
-                <div class="container col-md-1" v-if="role == 'customer' && restaurant.isOpen">
+                <div class="container col-md-1 mt-4" v-if="role == 'customer' && restaurant.isOpen">
                     <button type="button" class="btn btn-primary btn-lg text-nowrap px-3" v-on:click="checkout" v-bind:disabled="cart.products.length == 0"><i class="fa fa-shopping-bag"></i> <span class="align-middle">{{cart.products.length}}</span></button>
                 </div>	
-                <div class="container col-md-1" v-if="role == 'admin'">
+                <div class="container col-md-1 mt-4" v-if="role == 'admin'">
                     <button type="button" class="btn btn-dark btn-lg text-nowrap px-3" v-on:click="deleteRestaurant"><i class="fa fa-trash"></i></button>
                 </div>	
             </div>   	
@@ -176,6 +195,15 @@ Vue.component('app-restaurant-overview', {
                     </div>
                 </div>
  
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="width: 100%; height: 550px">
+            <div class="offcanvas-header">
+            <h5 class="offcanvas-title" v-if="restaurant.location" id="offcanvasBottomLabel">{{restaurant.location.address}}, {{restaurant.location.city}}, {{restaurant.location.latitude}}, {{restaurant.location.longitude}}</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body large">
+                <div id="map" class="map" style="width: 100%; height: 450px"></div>
             </div>
         </div>
     </div>
