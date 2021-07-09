@@ -19,6 +19,7 @@ import beans.User;
 import dto.CredentialsDTO;
 import dto.UserDTO;
 import services.AuthService;
+import services.CancellationLogService;
 import services.CustomerService;
 import services.UserService;
 
@@ -70,6 +71,23 @@ public class UserController {
 					return "User not found: " + username;
 				}
 				return gson.toJson(user);
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
+		get("/spammers", (req, res) -> {
+			res.type("application/json");
+			
+			if (authService.isAuthorized(req)) {
+				CancellationLogService logService = new CancellationLogService();
+				List<UserDTO> users = new ArrayList<>();
+				for (User u : logService.getSpammers()) {
+					UserDTO dto = mapToDTO(u);
+					users.add(dto);
+				}
+				return gson.toJson(users);
 			}
 			
 			res.status(403);
