@@ -24,6 +24,17 @@ public class CustomerController {
 		authService = new AuthService(key);
 		customerService = new CustomerService();
 		
+		get("/customers", (req, res) -> {
+			res.type("application/json");
+					
+			if (authService.isAuthorized(req)) {
+				return gson.toJson(customerService.getAll());
+			}
+			
+			res.status(403);
+			return "Forbidden";
+		});
+		
 		get("/customers/:restaurantId", (req, res) -> {
 			res.type("application/json");
 			Integer restaurantId = Integer.parseInt(req.params("restaurantId"));

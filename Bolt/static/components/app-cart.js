@@ -7,7 +7,8 @@ Vue.component('app-cart',{
             cart: {},
             products: [], 
             productsInCart: [],
-            order: {id: null, date: null, total: 0.0, status: null, customerId: null, restaurantId: null, products: []}
+            order: {id: null, date: null, total: 0.0, status: null, customerId: null, restaurantId: null, products: []},
+            customer: {}
         }
     },
     mounted: function(){
@@ -45,6 +46,19 @@ Vue.component('app-cart',{
                             this.$router.push('/');
                         });
                 })
+            axios
+                .get('/customers', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(response => {
+                    response.data.forEach(element => {
+                        if(element.user.username == this.username){
+                            this.customer = element;
+                        }
+                    })
+                })
         }
         
     },
@@ -80,7 +94,7 @@ Vue.component('app-cart',{
                 </div>
                 <div class="row my-3">
                         <div class="col-md-6 d-flex align-items-center">
-                            <h5>Ukupno: {{cart.total}}</h5>
+                            <h5>Ukupno: {{cart.total}} <br/> <span class="text-info" v-if="customer.customerType">Cena sa popustom: {{ calculateDiscount(cart.total) }} </span></h5>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <button type="button" class="btn btn-outline-info btn-lg" v-on:click="makeOrder">Poruči</button>
@@ -141,7 +155,7 @@ Vue.component('app-cart',{
             this.order.customerId = this.username;
             this.order.restaurantId = this.restaurantId;
             this.order.products = this.cart.products;
-            this.order.total = this.cart.total;
+            this.order.total = this.calculateDiscount(this.cart.total);
             let token = window.localStorage.getItem('token');
                 axios
                 .post("/orders", this.order, {
@@ -163,6 +177,10 @@ Vue.component('app-cart',{
                         this.$router.push('/forbidden');
                     }       
                 })
+        },
+        calculateDiscount: function(total){
+            total = total * (1 - this.customer.customerType.discount)
+            return total;
         }
     }
 
