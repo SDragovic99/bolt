@@ -57,7 +57,7 @@ Vue.component('app-profiles', {
                                 </div>
                                 <div class="col-md-2 text-end" v-if="user.role != 'admin'">
                                     <button type="button" class="btn btn-outline-dark" v-on:click="deleteUser(user)"><i class="fa fa-trash"></i></button>
-                                    <button type="button" class="btn btn-outline-danger" v-on:click="blockUser(user)"><i class="fa fa-ban"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" :disabled="user.isBlocked == true" v-on:click="blockUser(user)"><i class="fa fa-ban"></i></button>
                                 </div>
                             </div>                           
                         </div>                       
@@ -152,7 +152,22 @@ Vue.component('app-profiles', {
             })
         },
         blockUser: function(user){
-            //TODO: block user
+            let token = window.localStorage.getItem('token');
+            user.isBlocked = true;
+                axios
+                .put('/users/' + user.username, user, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .catch(error => {
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }else{
+                        this.$router.push('/');
+                    }               
+                })
         }
     },
     filters: {

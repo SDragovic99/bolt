@@ -44,6 +44,9 @@ public class UserService {
 	public User updateUser(User user) throws ParseException {
 		User existingUser = userDAO.findUser(user.getUsername());
 		if (existingUser != null) {
+			if(user.getIsBlocked()) {
+				user.setPassword(existingUser.getPassword());
+			}
 			userDAO.updateUser(user);
 			return user;
 		}

@@ -45,7 +45,7 @@ Vue.component('app-spammers',{
                             </div>
                             <div class="col-md-4 mb-1 text-end">
                                 <div class="card-body">
-                                    <button type="button" class="btn btn-outline-danger" v-on:click="blockUser(user)"><i class="fa fa-ban"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" :disabled="user.isBlocked == true" v-on:click="blockUser(user)"><i class="fa fa-ban"></i></button>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3 ">
@@ -63,7 +63,22 @@ Vue.component('app-spammers',{
     `,
     methods: {
         blockUser: function(user){
-            //TODO block user
+            let token = window.localStorage.getItem('token');
+            user.isBlocked = true;
+                axios
+                .put('/users/' + user.username, user, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .catch(error => {
+                    if(error.response.status == 403){
+                        window.localStorage.removeItem("token");
+                        this.$router.push('/forbidden');
+                    }else{
+                        this.$router.push('/');
+                    }               
+                })
         }
     }
 })
