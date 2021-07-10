@@ -1,7 +1,7 @@
 Vue.component('app-registration-workers', {
     data: function(){
 		return {
-            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: null},
+            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: null, isBlocked: false, isDeleted: false},
             isSubmitted: false,
             uniqueUsername: true
         };
@@ -74,6 +74,7 @@ Vue.component('app-registration-workers', {
             this.isSubmitted = true;
             if(this.user.name && this.user.surname && this.user.dateOfBirth && this.user.gender && this.user.role && this.user.username && this.user.password){
                 let token = window.localStorage.getItem('token');
+                this.user.dateOfBirth = new Date(this.user.dateOfBirth)
                 axios
                 .post("/workers", this.user, {
                     headers: {

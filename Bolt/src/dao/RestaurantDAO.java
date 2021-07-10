@@ -22,6 +22,7 @@ public class RestaurantDAO {
 	}
 	
 	public Restaurant findRestaurant(Integer id) {
+		restaurants = loadRestaurants();
 		Restaurant r = restaurants.containsKey(id) ? restaurants.get(id) : null;
 		if(r != null) {
 			if(!r.getIsDeleted()) {
@@ -36,12 +37,14 @@ public class RestaurantDAO {
 	}
 	
 	public Collection<Restaurant> getAll(){
+		restaurants = loadRestaurants();
 		return restaurants.values().stream()
 				.filter(r -> !r.getIsDeleted())
 				.collect(Collectors.toList());
 	}
 	
 	public void addRestaurant(Restaurant restaurant) {
+		restaurants = loadRestaurants();
 		restaurants.put(restaurant.getId(), restaurant);
 		csvWriter.write(restaurant.toString());
 	}

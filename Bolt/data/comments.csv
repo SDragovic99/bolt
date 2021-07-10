@@ -1,5 +1,12 @@
-1,mikkica,1,Lots of trees!,4,approved,false
-2,mikkica,4,Ono...,1,disapproved,false
-3,koca,1,Sve je okej cene su super.,5,approved,false
-4,koca,1,Katastrofa,1,disapproved,false
-5,mikkica,4,Restoran ima super pice. Moja preporuka je WW!,5,approved,false
+1,mikkica,4,Restoran ima super pice. Moja preporuka je WW!,4,approved,false
+2,mikkica,2,Paste su vrlo fine i kremaste. Isto tako cene su pristupacne.,5,approved,false
+3,mikkica,1,Kul je jer nema nigde drugde ovako nesto.,4,approved,false
+4,anamihajlovic,4,Neprijatno iskustvo sa dostavljacem.,1,disapproved,true
+5,anamihajlovic,1,Vauuu!,5,approved,false
+6,anamihajlovic,2,Ekstra,5,approved,false
+7,koca,4,Pica ko pica. Nista posebno.,3,approved,false
+8,koca,2,Lepo je!,4,approved,false
+9,koca,1,Presna riba je ruzna...,2,disapproved,false
+10,nikolanik,2,Najbolja je pasta lasta.,4,approved,false
+11,nikolanik,4,Dosla je bas vruca sto je odlicno!,3,approved,false
+12,nikolanik,1,Nisam fan ribe ali ovo je super.,3,approved,false

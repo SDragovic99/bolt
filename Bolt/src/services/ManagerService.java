@@ -32,9 +32,12 @@ public class ManagerService {
 	public Manager getManager(String username) throws ParseException {
 		UserDAO userDAO = new UserDAO();
 		Manager manager = managerDAO.findManager(username);
-		if(userDAO.findUser(manager.getUsername()) == null){
-			return null;
+		if(manager != null) {
+			if(userDAO.findUser(manager.getUsername()) == null){
+				return null;
+			}
 		}
+		
 		return manager;
 	}
 	

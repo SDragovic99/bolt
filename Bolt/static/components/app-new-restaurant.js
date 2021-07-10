@@ -2,7 +2,7 @@ Vue.component('app-new-restaurant', {
     data: function(){
         return {
             restaurantDTO: {name: null, type: null, imagePath: null, location: null, username: null},
-            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: 'manager'},
+            user: {username: null, password: null, name: null, surname: null, gender: null, dateOfBirth: null, role: 'manager', isBlocked: false, isDeleted: false},
             isSubmitted: false,
             isRegistrationSubmitted: false,
             username: '',
@@ -202,6 +202,7 @@ Vue.component('app-new-restaurant', {
             this.user.username = this.username
             if(this.user.name && this.user.surname && this.user.dateOfBirth && this.user.gender && this.user.role && this.user.username && this.user.password){
                 let token = window.localStorage.getItem('token');
+                this.user.dateOfBirth = new Date(this.user.dateOfBirth)
                 axios
                 .post("/workers", this.user, {
                     headers: {

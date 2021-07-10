@@ -16,9 +16,12 @@ public class DelivererService {
 	public Deliverer get(String id) throws ParseException {
 		UserDAO userDAO = new UserDAO();
 		Deliverer deliverer =  delivererDAO.findDeliverer(id);
-		if(userDAO.findUser(deliverer.getUsername()) == null) {
-			return null;
+		if(deliverer != null) {
+			if(userDAO.findUser(deliverer.getUsername()) == null) {
+				return null;
+			}
 		}
+		
 		return deliverer;
 	}
 	
