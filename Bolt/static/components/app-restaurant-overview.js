@@ -142,7 +142,7 @@ Vue.component('app-restaurant-overview', {
         <div class="container shadow-lg p-3 mb-5 bg-body rounded col-md-11 justify-content-between">
             <div class="row">
                 <div class="col-md-6">
-                    <p id="rating2" class="card-text"><img src="/assets/smiling-xl.png"> <span class="align-middle">{{restaurant.rating}}</span></p>
+                    <p id="rating2" class="card-text"><img src="/assets/smiling-xl.png"> <span class="align-middle">{{ Math.round((restaurant.rating + Number.EPSILON) * 100) / 100 }}</span></p>
                 </div>
                 <div class="col-md-6 text-end align-self-center" v-if="role == 'admin' || role == 'customer' || manager.restaurantId == restaurantId">  
                     <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12" aria-expanded="false" aria-controls="collapse12">Komentari</button>
@@ -215,7 +215,7 @@ Vue.component('app-restaurant-overview', {
         </div>
         <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="width: 100%; height: 550px">
             <div class="offcanvas-header">
-            <h5 class="offcanvas-title" v-if="restaurant.location" id="offcanvasBottomLabel">{{restaurant.location.address}}, {{restaurant.location.city}}, {{restaurant.location.latitude}}, {{restaurant.location.longitude}}</h5>
+                <h5 class="offcanvas-title" v-if="restaurant.location" id="offcanvasBottomLabel">{{restaurant.location.address}}, {{restaurant.location.city}}<br><span class="text-muted fs-6" v-if="restaurant.location">{{restaurant.location.latitude}}, {{restaurant.location.longitude}}</span></h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body large">

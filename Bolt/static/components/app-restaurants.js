@@ -113,7 +113,7 @@ Vue.component('app-restaurants', {
                                 <p class="address">{{restaurant.location.address}}, {{restaurant.location.city}}, {{restaurant.location.postalCode}}</p>
                             </div>
                             <div class="rating-wrapper">
-                                <p id="rating" class="card-text"><img src="/assets/smiling.png"><span class="align-middle"><small class="text-muted"> {{restaurant.rating}}</small></span></p>
+                                <p id="rating" class="card-text"><img src="/assets/smiling.png"><span class="align-middle"><small class="text-muted"> {{ Math.round((restaurant.rating + Number.EPSILON) * 100) / 100 }}</small></span></p>
                             </div>
                         </a>    
                     </div>

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import beans.Restaurant;
+import dao.CommentDAO;
 import dao.RestaurantDAO;
 import dto.RestaurantDTO;
 
@@ -40,5 +41,14 @@ public class RestaurantService {
 	
 	public void deleteRestaurant(Integer id) {
 		restaurantDAO.deleteRestaurant(id);
+	}
+	
+	public void updateRating(Integer id) {
+		CommentDAO commentDAO = new CommentDAO();
+		Restaurant restaurant = restaurantDAO.findRestaurant(id);
+		if(restaurant != null) {
+			restaurant.setRating(commentDAO.getAvgRestaurantRating(id));
+			updateRestaurant(id, restaurant);
+		}
 	}
 }

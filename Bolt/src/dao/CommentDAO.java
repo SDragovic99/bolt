@@ -59,6 +59,13 @@ public class CommentDAO {
 			csvWriter.write(c.toString());
 		}
 	}
+	
+	public double getAvgRestaurantRating(Integer restaurantId) {
+		return getAll(restaurantId).stream()
+				.mapToDouble(Comment::getReview)
+				.average()
+				.orElse(0.0);
+	}
 
 	private HashMap<Integer, Comment> loadComments() {
 		HashMap<Integer, Comment> comments = new HashMap<>();

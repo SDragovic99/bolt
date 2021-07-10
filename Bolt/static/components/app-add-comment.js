@@ -4,7 +4,7 @@ Vue.component('app-add-comment', {
             restaurant: {},
             restaurantId: this.$route.params.id,
             username: '',
-            comment: {customerId: null, restaurantId: null, description: null, review: null},
+            comment: {customerId: null, restaurantId: null, description: null, review: null, isDeleted: false},
             isValid: true
         }
     },

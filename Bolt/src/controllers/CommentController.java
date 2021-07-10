@@ -12,16 +12,19 @@ import com.google.gson.Gson;
 import beans.Comment;
 import services.AuthService;
 import services.CommentService;
+import services.RestaurantService;
 
 public class CommentController {
 	private AuthService authService;
 	private CommentService commentService;
+	private RestaurantService restaurantService;
 	
 	private static Gson gson = new Gson();
 	
 	public CommentController(Key key) {
 		authService = new AuthService(key);
 		commentService = new CommentService();
+		restaurantService = new RestaurantService();
 		
 		post("/comments", (req, res) -> {
 			res.type("application/json");
@@ -29,6 +32,7 @@ public class CommentController {
 			if (authService.isAuthorized(req)) {
 				Comment comment = gson.fromJson(req.body(), Comment.class);
 				commentService.addComment(comment);
+				restaurantService.updateRating(comment.getRestaurantId());
 				res.status(200);
 				return "SUCCESS";
 			}
