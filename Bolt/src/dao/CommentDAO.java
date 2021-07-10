@@ -24,6 +24,16 @@ public class CommentDAO {
 		return comments.size() + 1;
 	}
 	
+	public Comment findComment(Integer id) {
+		Comment comment = comments.containsKey(id) ? comments.get(id) : null;
+		if(comment != null) {
+			if(!comment.getIsDeleted()) {
+				return comment;
+			}
+		}
+		return null;
+	}
+	
 	public Collection<Comment> getAll(){
 		return comments.values().stream()
 				.filter(comment -> !comment.getIsDeleted())
@@ -62,6 +72,7 @@ public class CommentDAO {
 	
 	public double getAvgRestaurantRating(Integer restaurantId) {
 		return getAll(restaurantId).stream()
+				.filter(comment -> comment.getStatus().equals(CommentStatus.approved))
 				.mapToDouble(Comment::getReview)
 				.average()
 				.orElse(0.0);

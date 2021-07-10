@@ -13,6 +13,10 @@ public class CommentService {
 		commentDAO = new CommentDAO();
 	}
 	
+	public Comment findComment(Integer id) {
+		return commentDAO.findComment(id);
+	}
+	
 	public void addComment(Comment comment) {
 		comment.setId(commentDAO.generateId());
 		comment.setStatus(CommentStatus.waitingForApproval);	

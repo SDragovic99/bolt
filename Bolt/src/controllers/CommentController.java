@@ -32,7 +32,6 @@ public class CommentController {
 			if (authService.isAuthorized(req)) {
 				Comment comment = gson.fromJson(req.body(), Comment.class);
 				commentService.addComment(comment);
-				restaurantService.updateRating(comment.getRestaurantId());
 				res.status(200);
 				return "SUCCESS";
 			}
@@ -62,6 +61,7 @@ public class CommentController {
 				commentService = new CommentService();
 				Comment comment = gson.fromJson(req.body(), Comment.class);
 				commentService.updateComment(id, comment);
+				restaurantService.updateRating(comment.getRestaurantId());
 				return "Success";
 			}
 			
@@ -74,7 +74,9 @@ public class CommentController {
 			Integer id = Integer.parseInt(req.params("id"));
 			
 			if(authService.isAuthorized(req)) {
-				commentService.deleteComment(id);
+				Comment comment = commentService.findComment(id);
+				commentService.deleteComment(id);		
+				restaurantService.updateRating(comment.getRestaurantId());
 				return "Success";
 			}
 			
