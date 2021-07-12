@@ -37,6 +37,7 @@ public class UserController {
 			res.type("application/json");
 
 			if (authService.isAuthorized(req)) {
+				userService = new UserService();
 				List<UserDTO> users = new ArrayList<>();
 				for (User u : userService.getAll()) {
 					UserDTO dto = mapToDTO(u);
